@@ -1,0 +1,5 @@
+{
+  "root": true,
+  "env": { "browser": true, "node": true, "es6": true },
+  "extends": ["next/babel","next/core-web-vitals"]
+}

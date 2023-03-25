@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.card {
+  @apply mb-5 block border border-gray-200 shadow-sm;
+}
+.box {
+  @apply mb-5 block box-border border border-gray-200 shadow-sm;
+}
+
+.primary-button {
+  @apply bg-slate-800 text-white py-2 px-4 mt-2 shadow outline-none hover:bg-slate-700   active:bg-slate-600;
+}
+.default-button {
+  @apply bg-gray-100 py-2  px-4 text-black shadow outline-none hover:bg-gray-200  active:bg-gray-300;
+}
+
+.image-container {
+  @apply w-full md:col-span-2;
+}
+
+.image {
+  @apply object-contain w-full relative;
+}
+
+input,
+select,
+textarea {
+  @apply rounded border p-2  outline-none ring-indigo-300  focus:ring;
+}
+
+.dropdown-link {
+  @apply flex p-2 hover:bg-gray-200 shadow-sm;
+}
+
+.alert-error {
+  @apply my-3 rounded-lg bg-red-100 p-3 text-red-700;
+}
+
+.alert-success {
+  @apply my-3 rounded-lg bg-green-100 p-3 text-green-700;
+}
