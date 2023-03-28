@@ -52,3 +52,15 @@ textarea {
 .alert-success {
   @apply my-3 rounded-lg bg-green-100 p-3 text-green-700;
 }
+
+/* Price Range */
+input[type="range"]::-webkit-slider-thumb {
+  pointer-events: auto;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  -webkit-appearance: none;
+  @apply bg-green-500;
+
+  /* @apply w-6 h-6 appearance-none pointer-events-auto; */
+}

@@ -8,6 +8,7 @@ import axios from "axios";
 import Link from "next/link";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import Image from "next/image";
 
 export default function Home({ products, featuredProducts }) {
   const { state, dispatch } = AppState();
@@ -38,11 +39,9 @@ export default function Home({ products, featuredProducts }) {
           {featuredProducts.map((product) => (
             <div key={product._id}>
               <Link href={`/product/${product.slug}`} className="flex" passHref>
-                <img
-                  className="h-[12rem] md:h-[20rem]"
-                  src={product.banner}
-                  alt={product.name}
-                />
+                <div className="h-[12rem] md:h-[20rem]">
+                  <Image src={product.featuredImage} alt={product.name} fill></Image>
+                </div>
               </Link>
             </div>
           ))}
@@ -64,7 +63,7 @@ export default function Home({ products, featuredProducts }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   await db.connect();
   const products = await Product.find().lean();
   const featuredProducts = await Product.find({ isFeatured: true }).lean();
@@ -73,6 +72,5 @@ export async function getStaticProps() {
       featuredProducts: featuredProducts.map(db.convertDocToObj),
       products: products.map(db.convertDocToObj),
     },
-    revalidate: 10,
   };
 }

@@ -1,6 +1,6 @@
 import db from "../../../../utils/db.js";
 import Product from "../../../../models/Product";
-import { getSession } from "next-auth/react/index.js";
+import { getSession } from "next-auth/react";
 
 const handler = async (req, res) => {
   if (req.method === "GET") {

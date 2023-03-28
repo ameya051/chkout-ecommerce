@@ -1,9 +1,11 @@
 import { Menu } from "@headlessui/react";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import Cookies from "js-cookie";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { AppState } from "../utils/Store";
 import { Bars3Icon, AiOutlineClose } from "@heroicons/react/24/outline";
+import { useRouter } from "next/router";
 
 const Navbar = () => {
   const { status, data: session } = useSession();
@@ -33,6 +35,14 @@ const Navbar = () => {
     signOut({ callbackUrl: "/login" });
   };
 
+  const [query, setQuery] = useState('');
+
+  const router = useRouter();
+  const submitHandler = (e) => {
+    e.preventDefault();
+    router.push(`/search?query=${query}`);
+  };
+
   return (
     <header className="sticky top-0 z-30 w-full bg-white">
       <nav className="flex h-20 items-center px-4 md:px-24 justify-between shadow-md">
@@ -40,14 +50,14 @@ const Navbar = () => {
           ChkOut
         </Link>
 
-        <form class="mx-auto flex w-full justify-center">
+        <form onSubmit={submitHandler} className="mx-auto flex w-full justify-center">
           <input
             type="search"
-            class="rounded-tr-none rounded-br-none p-1 text-md focus:ring-0"
+            className="rounded-tr-none rounded-br-none p-1 text-md focus:ring-0"
             placeholder="Search products"
           />
           <button
-            class="rounded rounded-tl-none rounded-bl-none bg-slate-800 hover:bg-slate-700 border p-1 text-sm dark:text-black"
+            className="rounded rounded-tl-none rounded-bl-none bg-slate-800 hover:bg-slate-700 border p-1 text-sm dark:text-black"
             type="submit"
             id="button-addon2"
           >
@@ -55,14 +65,14 @@ const Navbar = () => {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="2"
+              strokeWidth="2"
               stroke="white"
               aria-hidden="true"
-              class="h-5 w-5"
+              className="h-5 w-5"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               ></path>
             </svg>
@@ -132,9 +142,9 @@ const Navbar = () => {
           className="block sm:hidden z-10 cursor-pointer"
         >
           {isOpen ? (
-            <AiOutlineClose class="md:hidden ml-4 h-6 w-6 text-gray-900" />
+            <AiOutlineClose className="md:hidden ml-4 h-6 w-6 text-gray-900" />
           ) : (
-            <Bars3Icon class="md:hidden ml-4 h-6 w-6 text-gray-900" />
+            <Bars3Icon className="md:hidden ml-4 h-6 w-6 text-gray-900" />
           )}
         </div>
 

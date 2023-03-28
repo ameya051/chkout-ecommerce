@@ -49,7 +49,9 @@ const Login = () => {
         className="mx-auto max-w-screen-md"
         onSubmit={handleSubmit(submitHandler)}
       >
-        <h1 className="mb-4 md:mb-8 text-xl font-semibold text-center">Login</h1>
+        <h1 className="mb-4 md:mb-8 text-xl font-semibold text-center">
+          Login
+        </h1>
         <div className="mb-4">
           <label htmlFor="email">Email</label>
           <input
@@ -97,12 +99,8 @@ const Login = () => {
             <div className="text-red-500 ">{errors.password.message}</div>
           )}
         </div>
-
-        <div className="mb-4">
-          <button className="primary-button">Login</button>
-        </div>
         <div className="flex-row flex justify-between">
-        <div className="mb-4 text-gray-600 transition-all duration-300 ease-in-out">
+          <div className="mb-4 text-gray-600 transition-all duration-300 ease-in-out">
             <Link
               className="text-sm bg-left-bottom bg-gradient-to-r from-gray-600 to-gray-600 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-300 ease-out"
               href="forgot-password"
@@ -119,6 +117,9 @@ const Login = () => {
               Register
             </Link>
           </div>
+        </div>
+        <div className="mb-4">
+          <button className="primary-button">Login</button>
         </div>
       </form>
     </Layout>

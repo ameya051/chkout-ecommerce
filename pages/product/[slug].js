@@ -1,20 +1,23 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Layout from "../../components/Layout";
 import db from "../../utils/db";
 import { AppState } from "../../utils/Store";
 import Product from "../../models/Product";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 
 const ProductScreen = (props) => {
+  const { status, data: session } = useSession();
   const { product } = props;
   const { state, dispatch } = AppState();
   const router = useRouter();
-  const { redirect } = router.query;
+  console.log(router);
 
+  const [size, setSize] = useState("");
   const [reviews, setReviews] = useState([]);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -42,10 +45,10 @@ const ProductScreen = (props) => {
       const { data } = await axios.get(`/api/products/${product._id}/reviews`);
       setReviews(data);
     } catch (err) {
-      enqueueSnackbar(getError(err), { variant: 'error' });
+      enqueueSnackbar(getError(err), { variant: "error" });
     }
   };
-  
+
   useEffect(() => {
     fetchReviews();
   }, []);
@@ -104,13 +107,9 @@ const ProductScreen = (props) => {
           <div>
             <ul>
               <li>
-                <h1 className=" text-4xl mb-2">{product.name}</h1>
-              </li>
-              <li>
-                <p className="text-2xl mb-2">{product.brand}</p>
-              </li>
-              <li>
-                <p className="text-lg mb-2">{product.category}</p>
+                <h1 className="text-2xl font-bold text-gray-900 mb-1">
+                  {product.name}
+                </h1>
               </li>
               <li>
                 <div className="flex items-center text-amber-400">
@@ -183,7 +182,33 @@ const ProductScreen = (props) => {
                   </a>
                 </div>
               </li>
-              <li>{product.description}</li>
+              <li>
+                <p className="text-xl font-bold text-gray-900 mb-1">
+                  Brand: {product.brand}
+                </p>
+              </li>
+              <li>
+                <p className="text-xl font-bold text-gray-900 mb-2">
+                  Category: {product.category}
+                </p>
+              </li>
+              <li>
+                <h3 class="font-medium capitalize text-gray-600 mb-2 underline">
+                  description
+                </h3>
+                <div class="leading-7 description">
+                  <p>
+                    <span
+                      style={{
+                        backgroundColor: "rgb(255, 255, 255)",
+                        color: "rgb(0, 0, 0)",
+                      }}
+                    >
+                      {product.description}
+                    </span>
+                  </p>
+                </div>
+              </li>
             </ul>
           </div>
           <div>
@@ -208,24 +233,42 @@ const ProductScreen = (props) => {
           </div>
         </div>
         <div id="reviews">
-          <div className="text-2xl mb-8">Reviews</div>
-          <ul>
-            <li>
-              <div></div>
-            </li>
-          </ul>
-        </div>
-        <div className="block p-6 border mb-12">
-          <div className="text-grey-900 transition-all duration-300 ease-in-out">
-            Please{" "}
-            <Link
-              className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
-              href={`/login?redirect=${redirect || "/"}`}
-            >
-              login
-            </Link>{" "}
-            to write a review.
+          <div className="text-2xl mb-4 font-bold text-gray-900">
+            Customer Reviews
           </div>
+          {session?.user ? (
+            <form onSubmit={submitHandler} className="p-4 border">
+              <h2 className="text-xl mb-1">Write your review!</h2>
+            </form>
+          ) : (
+            <div className="block p-6 border mb-4">
+              <div className="text-grey-900 transition-all duration-300 ease-in-out">
+                Please{" "}
+                <Link
+                  className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+                  href={`/login?redirect=${router.asPath || "/"}`}
+                >
+                  login
+                </Link>{" "}
+                to write a review.
+              </div>
+            </div>
+          )}
+          {reviews.length === 0 && <div className="mb-4">No reviews.</div>}
+          <ul>
+            {reviews.map((review) => (
+              <li key={review._id}>
+                <div className="mt-3 p-3 shadow-inner dark:shadow-gray-700">
+                  <div>
+                    <strong>{review.name}</strong> on{" "}
+                    {review.createdAt.substring(0, 10)}
+                  </div>
+                  <Rating rating={review.rating}></Rating>
+                  <div>{review.comment}</div>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </Layout>

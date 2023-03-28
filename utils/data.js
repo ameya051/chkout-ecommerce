@@ -26,9 +26,9 @@ const data = {
       rating: 4.5,
       numReviews: 8,
       countInStock: 20,
-      description: "A popular shirt",
+      description: "Introducing the must-have shirt of the season - our popular shirt! This versatile garment is a true wardrobe staple, perfect for any occasion. Made from premium quality materials, our popular shirt is soft to the touch and comfortable to wear all day long.",
       isFeatured: true,
-      banner: "/images/banner1.jpg",
+      featuredImage: "/images/banner1.jpg",
     },
     {
       name: "Fit Shirt",
@@ -40,9 +40,9 @@ const data = {
       rating: 3.2,
       numReviews: 10,
       countInStock: 20,
-      description: "A popular shirt",
+      description: "Introducing the must-have shirt of the season - our popular shirt! This versatile garment is a true wardrobe staple, perfect for any occasion. Made from premium quality materials, our popular shirt is soft to the touch and comfortable to wear all day long.",
       isFeatured: true,
-      banner: "/images/banner2.jpg",
+      featuredImage: "/images/banner2.jpg",
     },
     {
       name: "Slim Shirt",
@@ -54,7 +54,7 @@ const data = {
       rating: 4.5,
       numReviews: 3,
       countInStock: 20,
-      description: "A popular shirt",
+      description: "Introducing the must-have shirt of the season - our popular shirt! This versatile garment is a true wardrobe staple, perfect for any occasion. Made from premium quality materials, our popular shirt is soft to the touch and comfortable to wear all day long.",
     },
     {
       name: "Golf Pants",
@@ -66,7 +66,7 @@ const data = {
       rating: 2.9,
       numReviews: 13,
       countInStock: 20,
-      description: "Smart looking pants",
+      description: "Introducing the must-have shirt of the season - our popular shirt! This versatile garment is a true wardrobe staple, perfect for any occasion. Made from premium quality materials, our popular shirt is soft to the touch and comfortable to wear all day long.",
     },
     {
       name: "Fit Pants",
@@ -78,7 +78,7 @@ const data = {
       rating: 3.5,
       numReviews: 7,
       countInStock: 20,
-      description: "A popular pants",
+      description: "Introducing the must-have shirt of the season - our popular shirt! This versatile garment is a true wardrobe staple, perfect for any occasion. Made from premium quality materials, our popular shirt is soft to the touch and comfortable to wear all day long.",
     },
     {
       name: "Classic Pants",
@@ -90,7 +90,7 @@ const data = {
       rating: 2.4,
       numReviews: 14,
       countInStock: 20,
-      description: "A popular pants",
+      description: "Introducing the must-have shirt of the season - our popular shirt! This versatile garment is a true wardrobe staple, perfect for any occasion. Made from premium quality materials, our popular shirt is soft to the touch and comfortable to wear all day long.",
     },
   ],
 };

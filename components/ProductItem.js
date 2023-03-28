@@ -1,11 +1,15 @@
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
 const ProductItem = ({ product, addToCartHandler }) => {
   return (
     <div className="card">
-      <Link href={`/product/${product.slug}`}>
+      <Link passHref href={`/product/${product.slug}`}>
         <img src={product.image} alt={product.name} className="shadow" />
+        {/* <div className=" shadow w-fit h-1/2 relative">
+          <Image src={product.image} alt={product.name} style={{objectFit: "contain",}}></Image>
+        </div> */}
       </Link>
       <div className="flex flex-col items-center justify-center p-4">
         <Link href={`/product/${product.slug}`}>

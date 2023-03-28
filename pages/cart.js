@@ -68,7 +68,7 @@ const Cart = () => {
       ) : (
         <div className="grid md:grid-cols-4 md:gap-5">
           <div className="overflow-x-auto md:col-span-3">
-            <table className="min-w-full">
+            <table className="min-w-full table-fixed">
               <thead className="border-b">
                 <tr>
                   <th className="px-5 text-left">Item</th>
@@ -83,7 +83,7 @@ const Cart = () => {
                     <tr key={item.slug} className="border-b">
                       <td className="px-5">
                         <Link
-                          className="flex flex-wrap items-center"
+                          className="flex flex-row items-center"
                           href={`/product/${item.slug}`}
                         >
                           <Image
@@ -93,7 +93,7 @@ const Cart = () => {
                             width={50}
                             className="mr-4 mt-2"
                           ></Image>
-                          <div className="my-2">{item.name}</div>
+                          <div className="mr-6 md:mr-2">{item.name}</div>
                         </Link>
                       </td>
                       <td className="p-5 text-right flex flex-row-reverse">
