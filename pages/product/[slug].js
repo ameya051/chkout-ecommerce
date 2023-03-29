@@ -4,9 +4,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Layout from "../../components/Layout";
-import db from "../../utils/db";
 import { AppState } from "../../utils/Store";
-import Product from "../../models/Product";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 
@@ -17,7 +15,7 @@ const ProductScreen = (props) => {
   const router = useRouter();
   console.log(router);
 
-  const [size, setSize] = useState("");
+  // const [size, setSize] = useState("");
   const [reviews, setReviews] = useState([]);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -281,12 +279,14 @@ export async function getServerSideProps(context) {
   const { params } = context;
   const { slug } = params;
 
-  await db.connect();
-  const product = await Product.findOne({ slug }).lean();
-  await db.disconnect();
+  const config = { "Content-Type": "application/json" };
+  const { data } = await axios.get(
+    `http://localhost:5000/api/products/${slug}`
+  );
+
   return {
     props: {
-      product: product ? db.convertDocToObj(product) : null,
+      product: data,
     },
   };
 }

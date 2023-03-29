@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { AppState } from "../utils/Store";
-import { Bars3Icon, AiOutlineClose } from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 
 const Navbar = () => {
@@ -35,7 +35,7 @@ const Navbar = () => {
     signOut({ callbackUrl: "/login" });
   };
 
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
   const router = useRouter();
   const submitHandler = (e) => {
@@ -50,7 +50,10 @@ const Navbar = () => {
           ChkOut
         </Link>
 
-        <form onSubmit={submitHandler} className="mx-auto flex w-full justify-center">
+        <form
+          onSubmit={submitHandler}
+          className="mx-auto flex w-full justify-center"
+        >
           <input
             type="search"
             className="rounded-tr-none rounded-br-none p-1 text-md focus:ring-0"
@@ -80,7 +83,6 @@ const Navbar = () => {
         </form>
 
         <ul className="hidden sm:flex">
-          <li></li>
           <li className="py-4">
             <Link href="/cart">
               Cart
@@ -142,7 +144,7 @@ const Navbar = () => {
           className="block sm:hidden z-10 cursor-pointer"
         >
           {isOpen ? (
-            <AiOutlineClose className="md:hidden ml-4 h-6 w-6 text-gray-900" />
+            <XMarkIcon className="md:hidden ml-4 h-6 w-6 text-gray-900" />
           ) : (
             <Bars3Icon className="md:hidden ml-4 h-6 w-6 text-gray-900" />
           )}
@@ -151,22 +153,74 @@ const Navbar = () => {
         <div
           className={
             isOpen
-              ? 'sm:hidden absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center w-full h-screen bg-white text-center ease-in duration-300'
-              : 'sm:hidden absolute top-0 left-[-100%] right-0 bottom-0 flex justify-center items-center w-full h-screen bg-white text-center ease-in duration-300'
+              ? "sm:hidden absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center w-full h-screen bg-white text-center ease-in duration-300"
+              : "sm:hidden absolute top-0 left-[-100%] right-0 bottom-0 flex justify-center items-center w-full h-screen bg-white text-center ease-in duration-300"
           }
         >
           <ul>
-            <li onClick={toggleMenu} className='p-4 text-4xl hover:text-gray-500'>
-              <Link href='/'>Home</Link>
+            <li
+              onClick={toggleMenu}
+              className="p-4 text-4xl hover:text-gray-500"
+            >
+              <Link href="/">Home</Link>
             </li>
-            <li onClick={toggleMenu} className='p-4 text-4xl hover:text-gray-500'>
-              <Link href='/#gallery'>Gallery</Link>
+            <li
+              onClick={toggleMenu}
+              className="p-4 text-4xl hover:text-gray-500"
+            >
+              <Link href="/cart">Cart</Link>
             </li>
-            <li onClick={toggleMenu} className='p-4 text-4xl hover:text-gray-500'>
-              <Link href='/work'>Work</Link>
-            </li>
-            <li onClick={toggleMenu} className='p-4 text-4xl hover:text-gray-500'>
-              <Link href='/contact'>Contact</Link>
+            <li
+              onClick={toggleMenu}
+              className="p-4 text-4xl hover:text-gray-500"
+            >
+              <Link href="/profile">
+                {status === "loading" ? (
+                  "Loading"
+                ) : session?.user ? (
+                  <Menu as="div" className="relative inline-block">
+                    <Menu.Button>{session.user.name}</Menu.Button>
+                    <Menu.Items
+                      as="div"
+                      className="absolute right-0 w-56 origin-top-right bg-white  shadow-lg "
+                    >
+                      <Menu.Item>
+                        <Link className="dropdown-link" href="/profile">
+                          Profile
+                        </Link>
+                      </Menu.Item>
+                      <Menu.Item>
+                        <Link className="dropdown-link" href="/order-history">
+                          Order History
+                        </Link>
+                      </Menu.Item>
+                      {session.user.isAdmin && (
+                        <Menu.Item>
+                          <Link
+                            className="dropdown-link"
+                            href="/admin/dashboard"
+                          >
+                            Admin Dashboard
+                          </Link>
+                        </Menu.Item>
+                      )}
+                      <Menu.Item>
+                        <Link
+                          className="dropdown-link"
+                          href="#"
+                          onClick={handleLogout}
+                        >
+                          Logout
+                        </Link>
+                      </Menu.Item>
+                    </Menu.Items>
+                  </Menu>
+                ) : (
+                  <Link className="pl-4" href="/login">
+                    Login
+                  </Link>
+                )}
+              </Link>
             </li>
           </ul>
         </div>

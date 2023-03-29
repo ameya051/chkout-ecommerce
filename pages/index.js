@@ -40,7 +40,11 @@ export default function Home({ products, featuredProducts }) {
             <div key={product._id}>
               <Link href={`/product/${product.slug}`} className="flex" passHref>
                 <div className="h-[12rem] md:h-[20rem]">
-                  <Image src={product.featuredImage} alt={product.name} fill></Image>
+                  <Image
+                    src={product.featuredImage}
+                    alt={product.name}
+                    fill
+                  ></Image>
                 </div>
               </Link>
             </div>
@@ -65,12 +69,18 @@ export default function Home({ products, featuredProducts }) {
 
 export async function getServerSideProps() {
   await db.connect();
-  const products = await Product.find().lean();
   const featuredProducts = await Product.find({ isFeatured: true }).lean();
+
+  const config = { "Content-Type": "application/json" };
+  const { data } = await axios.get(
+    "http://localhost:5000/api/products",
+    config
+  );
+
   return {
     props: {
       featuredProducts: featuredProducts.map(db.convertDocToObj),
-      products: products.map(db.convertDocToObj),
+      products: data,
     },
   };
 }
