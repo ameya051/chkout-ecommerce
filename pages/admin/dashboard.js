@@ -154,5 +154,3 @@ export default function Dashboard() {
     </Layout>
   );
 }
-
-Dashboard.auth = { adminOnly: true };

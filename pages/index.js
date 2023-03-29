@@ -1,14 +1,14 @@
+import Image from "next/image";
+import Link from "next/link";
 import Layout from "../components/Layout";
 import ProductItem from "../components/ProductItem";
 import db from "../utils/db";
 import Product from "../models/Product";
 import { toast } from "react-toastify";
 import { AppState } from "../utils/Store";
-import axios from "axios";
-import Link from "next/link";
+import axios from '../utils/axiosInstance.js';
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import Image from "next/image";
 
 export default function Home({ products, featuredProducts }) {
   const { state, dispatch } = AppState();
@@ -37,6 +37,7 @@ export default function Home({ products, featuredProducts }) {
           autoPlay
         >
           {featuredProducts.map((product) => (
+            
             <div key={product._id}>
               <Link href={`/product/${product.slug}`} className="flex" passHref>
                 <div className="h-[12rem] md:h-[20rem]">
@@ -73,7 +74,7 @@ export async function getServerSideProps() {
 
   const config = { "Content-Type": "application/json" };
   const { data } = await axios.get(
-    "http://localhost:5000/api/products",
+    "/api/products",
     config
   );
 

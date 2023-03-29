@@ -1,20 +1,18 @@
-import { Menu } from "@headlessui/react";
-import { signOut, useSession } from "next-auth/react";
-import Cookies from "js-cookie";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
+import { Menu } from "@headlessui/react";
 import React, { useEffect, useState } from "react";
 import { AppState } from "../utils/Store";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 const Navbar = () => {
-  const { status, data: session } = useSession();
-
   const { state, dispatch } = AppState();
   const { cart } = state;
 
+  const user = JSON.parse(window.localStorage.getItem("user"));
   const [cartItemsCount, setCartItemsCount] = useState(0);
-
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -32,10 +30,7 @@ const Navbar = () => {
   const handleLogout = () => {
     Cookies.remove("cart");
     dispatch({ type: "CART_RESET" });
-    signOut({ callbackUrl: "/login" });
   };
-
-  const [query, setQuery] = useState("");
 
   const router = useRouter();
   const submitHandler = (e) => {
@@ -94,11 +89,9 @@ const Navbar = () => {
             </Link>
           </li>
           <li className="pl-4 py-4">
-            {status === "loading" ? (
-              "Loading"
-            ) : session?.user ? (
+            {user ? (
               <Menu as="div" className="relative inline-block">
-                <Menu.Button>{session.user.name}</Menu.Button>
+                <Menu.Button>{user.name.split(" ")[0]}</Menu.Button>
                 <Menu.Items
                   as="div"
                   className="absolute right-0 w-56 origin-top-right bg-white  shadow-lg "
@@ -113,7 +106,7 @@ const Navbar = () => {
                       Order History
                     </Link>
                   </Menu.Item>
-                  {session.user.isAdmin && (
+                  {user.isAdmin && (
                     <Menu.Item>
                       <Link className="dropdown-link" href="/admin/dashboard">
                         Admin Dashboard
@@ -175,11 +168,9 @@ const Navbar = () => {
               className="p-4 text-4xl hover:text-gray-500"
             >
               <Link href="/profile">
-                {status === "loading" ? (
-                  "Loading"
-                ) : session?.user ? (
+                {user ? (
                   <Menu as="div" className="relative inline-block">
-                    <Menu.Button>{session.user.name}</Menu.Button>
+                    <Menu.Button></Menu.Button>
                     <Menu.Items
                       as="div"
                       className="absolute right-0 w-56 origin-top-right bg-white  shadow-lg "
@@ -194,7 +185,7 @@ const Navbar = () => {
                           Order History
                         </Link>
                       </Menu.Item>
-                      {session.user.isAdmin && (
+                      {user.isAdmin && (
                         <Menu.Item>
                           <Link
                             className="dropdown-link"
@@ -229,4 +220,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default dynamic(() => Promise.resolve(Navbar), { ssr: false });

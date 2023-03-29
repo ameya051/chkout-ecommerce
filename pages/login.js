@@ -5,22 +5,21 @@ import { getError } from "../utils/error";
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import axios from "../utils/axiosInstance.js";
+import Cookies from "js-cookie";
 
 const Login = () => {
   const [hidden, setHidden] = useState(true);
 
-  const { data: session } = useSession();
-
   const router = useRouter();
   const { redirect } = router.query;
 
-  useEffect(() => {
-    if (session?.user) {
-      router.push(redirect || "/");
-    }
-  }, [router, session, redirect]);
+  // useEffect(() => {
+  //   if (session?.user) {
+  //     router.push(redirect || "/");
+  //   }
+  // }, [router, redirect]);
 
   const {
     handleSubmit,
@@ -30,14 +29,23 @@ const Login = () => {
 
   const submitHandler = async ({ email, password }) => {
     try {
-      const result = await signIn("credentials", {
-        redirect: false,
-        email,
-        password,
-      });
-      if (result.error) {
-        toast.error(result.error);
+      // const result = await signIn("credentials", {
+      //   redirect: false,
+      //   email,
+      //   password,
+      // });
+      const config = { "Content-Type": "application/json" };
+      const { data } = await axios.post(
+        "/api/users/login",
+        { email, password },
+        config
+      );
+      if (data.error) {
+        toast.error(data.error);
       }
+      window.localStorage.setItem("user", JSON.stringify(data));
+      toast.success("You've logged in successfully.");
+      router.push("/");
     } catch (err) {
       toast.error(getError(err));
     }

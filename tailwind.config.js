@@ -5,7 +5,9 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      safelist: ['animate-[fade-in_1s_ease-in-out]']
+    },
   },
   plugins: [],
 }

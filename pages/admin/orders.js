@@ -117,5 +117,3 @@ export default function Orders() {
     </Layout>
   );
 }
-
-Orders.auth = { adminOnly: true };

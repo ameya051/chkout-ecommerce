@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Layout from "../../components/Layout";
 import { getError } from "../../utils/error";
+import axios from "axios";
 
 const ResetPassword = () => {
   const router = useRouter();
@@ -28,10 +29,10 @@ const ResetPassword = () => {
     formState: { errors },
   } = useForm();
 
-  const submitHandler = async ({ password }) => {
+  const submitHandler = async ({ new_password }) => {
     try {
       const { token } = router.query;
-
+      console.log(token, " ", new_password)
       setShowLoading(true);
       const config = {
         headers: {
@@ -40,7 +41,7 @@ const ResetPassword = () => {
       };
       const { data } = await axios.patch(
         `http://localhost:5000/api/users/reset`,
-        { token, password },
+        { token: token, password: new_password },
         config
       );
 
@@ -64,15 +65,15 @@ const ResetPassword = () => {
           Reset your password
         </h1>
         <div className="mb-4 relative">
-          <label htmlFor="new-password">Enter New Password</label>
+          <label htmlFor="new_password">Enter New Password</label>
           <input
             type={hidden ? "password" : "text"}
-            {...register("new-password", {
+            {...register("new_password", {
               required: "Please enter new password",
               minLength: { value: 6, message: "password is more than 5 chars" },
             })}
             className="w-full rounded-none border-gray-400 mt-2"
-            id="new-password"
+            id="new_password"
             autoFocus
           ></input>
           <button
@@ -96,7 +97,7 @@ const ResetPassword = () => {
             id="confirmPassword"
             {...register("confirmPassword", {
               required: "Please enter confirm password",
-              validate: (value) => value === getValues("password"),
+              validate: (value) => value === getValues("new_password"),
               minLength: {
                 value: 6,
                 message: "confirm password is more than 5 chars",
@@ -145,7 +146,7 @@ const ResetPassword = () => {
           </button>
         ) : (
           <div className="mt-2 mb-4">
-            <button className="primary-button">Send Link</button>
+            <button className="primary-button">Reset</button>
           </div>
         )}
       </form>
