@@ -11,9 +11,15 @@ const Navbar = () => {
   const { state, dispatch } = AppState();
   const { cart } = state;
 
-  const user = JSON.parse(window.localStorage.getItem("user"));
+  const router = useRouter();
   const [cartItemsCount, setCartItemsCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const data = JSON.parse(window.localStorage.getItem("user"));
+    setUser(data);
+  }, []);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -28,11 +34,13 @@ const Navbar = () => {
   }, [cart.cartItems]);
 
   const handleLogout = () => {
+    Cookies.remove("token");
+    window.localStorage.removeItem("user");
     Cookies.remove("cart");
     dispatch({ type: "CART_RESET" });
+    router.push("/login");
   };
 
-  const router = useRouter();
   const submitHandler = (e) => {
     e.preventDefault();
     router.push(`/search?query=${query}`);
@@ -91,7 +99,7 @@ const Navbar = () => {
           <li className="pl-4 py-4">
             {user ? (
               <Menu as="div" className="relative inline-block">
-                <Menu.Button>{user.name.split(" ")[0]}</Menu.Button>
+                <Menu.Button>{user?.name.split(" ")[0]}</Menu.Button>
                 <Menu.Items
                   as="div"
                   className="absolute right-0 w-56 origin-top-right bg-white  shadow-lg "
@@ -167,51 +175,46 @@ const Navbar = () => {
               onClick={toggleMenu}
               className="p-4 text-4xl hover:text-gray-500"
             >
-              <Link href="/profile">
-                {user ? (
-                  <Menu as="div" className="relative inline-block">
-                    <Menu.Button></Menu.Button>
-                    <Menu.Items
-                      as="div"
-                      className="absolute right-0 w-56 origin-top-right bg-white  shadow-lg "
-                    >
+              {user ? (
+                <Menu as="div" className="relative inline-block">
+                  <Menu.Button></Menu.Button>
+                  <Menu.Items
+                    as="div"
+                    className="absolute right-0 w-56 origin-top-right bg-white  shadow-lg "
+                  >
+                    <Menu.Item>
+                      <Link className="dropdown-link" href="/profile">
+                        Profile
+                      </Link>
+                    </Menu.Item>
+                    <Menu.Item>
+                      <Link className="dropdown-link" href="/order-history">
+                        Order History
+                      </Link>
+                    </Menu.Item>
+                    {user.isAdmin && (
                       <Menu.Item>
-                        <Link className="dropdown-link" href="/profile">
-                          Profile
+                        <Link className="dropdown-link" href="/admin/dashboard">
+                          Admin Dashboard
                         </Link>
                       </Menu.Item>
-                      <Menu.Item>
-                        <Link className="dropdown-link" href="/order-history">
-                          Order History
-                        </Link>
-                      </Menu.Item>
-                      {user.isAdmin && (
-                        <Menu.Item>
-                          <Link
-                            className="dropdown-link"
-                            href="/admin/dashboard"
-                          >
-                            Admin Dashboard
-                          </Link>
-                        </Menu.Item>
-                      )}
-                      <Menu.Item>
-                        <Link
-                          className="dropdown-link"
-                          href="#"
-                          onClick={handleLogout}
-                        >
-                          Logout
-                        </Link>
-                      </Menu.Item>
-                    </Menu.Items>
-                  </Menu>
-                ) : (
-                  <Link className="pl-4" href="/login">
-                    Login
-                  </Link>
-                )}
-              </Link>
+                    )}
+                    <Menu.Item>
+                      <Link
+                        className="dropdown-link"
+                        href="#"
+                        onClick={handleLogout}
+                      >
+                        Logout
+                      </Link>
+                    </Menu.Item>
+                  </Menu.Items>
+                </Menu>
+              ) : (
+                <Link className="pl-4" href="/login">
+                  Login
+                </Link>
+              )}
             </li>
           </ul>
         </div>

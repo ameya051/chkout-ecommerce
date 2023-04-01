@@ -14,9 +14,9 @@ const Login = () => {
 
   const router = useRouter();
   const { redirect } = router.query;
-
   // useEffect(() => {
-  //   if (session?.user) {
+  //   const user = window.localStorage.getItem('user')
+  //   if (user) {
   //     router.push(redirect || "/");
   //   }
   // }, [router, redirect]);
@@ -45,7 +45,7 @@ const Login = () => {
       }
       window.localStorage.setItem("user", JSON.stringify(data));
       toast.success("You've logged in successfully.");
-      router.push("/");
+      router.push(redirect || "/");
     } catch (err) {
       toast.error(getError(err));
     }

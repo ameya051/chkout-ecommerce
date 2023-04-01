@@ -45,6 +45,7 @@ export default function Home({ products, featuredProducts }) {
                     src={product.featuredImage}
                     alt={product.name}
                     fill
+                    priority={true}
                   ></Image>
                 </div>
               </Link>
@@ -70,8 +71,7 @@ export default function Home({ products, featuredProducts }) {
 
 export async function getServerSideProps() {
   await db.connect();
-  const featuredProducts = await Product.find({ isFeatured: true }).lean();
-
+  const featuredProducts = await Product.find({ isFeatured: true }, {reviews: 0}).lean();
   const config = { "Content-Type": "application/json" };
   const { data } = await axios.get(
     "/api/products",

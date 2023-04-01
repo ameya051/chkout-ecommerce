@@ -5,19 +5,25 @@ import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Layout from "../../components/Layout";
 import { AppState } from "../../utils/Store";
-import axios from "axios";
-import { useSession } from "next-auth/react";
+import axios from "../../utils/axiosInstance.js";
 import { useForm } from "react-hook-form";
+import { getError } from "../../utils/error";
+import Rating from "../../components/Rating";
 
 const ProductScreen = (props) => {
-  const { status, data: session } = useSession();
   const { product } = props;
   const { state, dispatch } = AppState();
+
   const router = useRouter();
-  console.log(router);
 
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    const data = JSON.parse(window.localStorage.getItem("user"));
+    setUser(data);
+  }, []);
 
   const {
     handleSubmit,
@@ -30,7 +36,7 @@ const ProductScreen = (props) => {
     setLoading(true);
     try {
       await axios.post(
-        `http://localhost:5000/api/products/${product._id}/reviews`,
+        `http://localhost:5000/api/products/reviews/${product._id}`,
         {
           rating,
           comment,
@@ -50,7 +56,7 @@ const ProductScreen = (props) => {
       if (!product) {
         return;
       }
-      const { data } = await axios.get(`/api/products/${product._id}/reviews`);
+      const { data } = await axios.get(`/api/products/reviews/${product._id}`);
       setReviews(data);
     } catch (err) {
       toast.error(getError(err));
@@ -69,27 +75,14 @@ const ProductScreen = (props) => {
     const existItem = state.cart.cartItems.find((item) => {
       return item.slug === product.slug;
     });
-
     const quantity = existItem ? existItem.quantity + 1 : 1;
 
-    const { data } = await axios.get(`/api/products/${product._id}`);
-
-    if (data.countInStock < quantity) {
-      toast("Product is out of stock.", {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        type: "error",
-      });
+    if (product.countInStock < quantity) {
+      toast.error("Product is out of stock.");
       return;
     } else {
       dispatch({ type: "CART_ADD_ITEM", payload: { ...product, quantity } });
-      router.push("/cart");
+      // router.push("/cart");
     }
   };
 
@@ -127,7 +120,7 @@ const ProductScreen = (props) => {
                     viewBox="0 0 20 20"
                     fill="currentColor"
                     aria-hidden="true"
-                    class="h-6 w-6"
+                    className="h-6 w-6"
                   >
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                   </svg>
@@ -193,7 +186,7 @@ const ProductScreen = (props) => {
           <div className="text-2xl mb-4 font-bold text-gray-900">
             Customer Reviews
           </div>
-          {session?.user ? (
+          {user ? (
             <form onSubmit={handleSubmit(submitHandler)} className="p-4 border">
               <h2 className="text-xl mb-1">Leave your review!</h2>
               <div className="mb-4">
@@ -257,7 +250,7 @@ const ProductScreen = (props) => {
           <ul>
             {reviews.map((review) => (
               <li key={review._id}>
-                <div className="mt-3 p-3 shadow-inner dark:shadow-gray-700">
+                <div className="mt-3 p-3 dark:shadow-gray-700">
                   <div>
                     <strong>{review.name}</strong> on{" "}
                     {review.createdAt.substring(0, 10)}
@@ -281,10 +274,7 @@ export async function getServerSideProps(context) {
   const { slug } = params;
 
   const config = { "Content-Type": "application/json" };
-  const { data } = await axios.get(
-    `http://localhost:5000/api/products/${slug}`,
-    config
-  );
+  const { data } = await axios.get(`/api/products/${slug}`, config);
 
   return {
     props: {

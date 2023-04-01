@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { signIn, useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { getError } from "../utils/error";
@@ -7,7 +6,6 @@ import axios from "axios";
 import Layout from "../components/Layout";
 
 export default function ProfileScreen() {
-  const { data: session } = useSession();
 
   const {
     handleSubmit,
@@ -17,10 +15,10 @@ export default function ProfileScreen() {
     formState: { errors },
   } = useForm();
 
-  useEffect(() => {
-    setValue("name", session.user.name);
-    setValue("email", session.user.email);
-  }, [session.user, setValue]);
+  // useEffect(() => {
+  //   setValue("name", session.user.name);
+  //   setValue("email", session.user.email);
+  // }, [session.user, setValue]);
 
   const submitHandler = async ({ name, email, password }) => {
     try {
@@ -29,11 +27,7 @@ export default function ProfileScreen() {
         email,
         password,
       });
-      const result = await signIn("credentials", {
-        redirect: false,
-        email,
-        password,
-      });
+      
       toast.success("Profile updated successfully");
       if (result.error) {
         toast.error(result.error);
@@ -132,5 +126,3 @@ export default function ProfileScreen() {
     </Layout>
   );
 }
-
-ProfileScreen.auth = true;
