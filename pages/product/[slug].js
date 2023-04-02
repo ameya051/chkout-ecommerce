@@ -128,7 +128,7 @@ const ProductScreen = (props) => {
                     href="#reviews"
                     class="font-medium text-gray-600 hover:underline"
                   >
-                    (14)
+                    ({product.numReviews})
                   </a>
                 </div>
               </li>

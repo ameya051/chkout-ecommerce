@@ -1,6 +1,5 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { signIn, useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import Layout from "../components/Layout";
 import { getError } from "../utils/error";
@@ -9,20 +8,19 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline";
 
-export default function LoginScreen() {
-  const { data: session } = useSession();
-
+export default function Register() {
   const router = useRouter();
   const { redirect } = router.query;
 
   const [hidden, setHidden] = useState(true);
   const [chidden, setcHidden] = useState(true);
+  const [user, setUser] = useState();
 
   useEffect(() => {
-    if (session?.user) {
+    if (user) {
       router.push(redirect || "/");
     }
-  }, [router, session, redirect]);
+  }, [router, redirect]);
 
   const {
     handleSubmit,
@@ -33,20 +31,20 @@ export default function LoginScreen() {
 
   const submitHandler = async ({ name, email, password }) => {
     try {
-      await axios.post("/api/auth/signup", {
-        name,
-        email,
-        password,
-      });
+      const {data}=await axios.post(
+        "/api/users/register",
+        {
+          name,
+          email,
+          password,
+        },
+        { "Content-Type": "application/json" }
+      );
 
-      const result = await signIn("credentials", {
-        redirect: false,
-        email,
-        password,
-      });
-      if (result.error) {
-        toast.error(result.error);
+      if (data.error) {
+        toast.error(data.error);
       }
+      
     } catch (err) {
       toast.error(getError(err));
     }

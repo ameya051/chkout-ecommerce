@@ -6,20 +6,17 @@ import React, { useEffect, useState } from "react";
 import { AppState } from "../utils/Store";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Cookies from "js-cookie";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../store/slices/authSlice";
 
 const Navbar = () => {
+  const { token, user } = useSelector((state) => state.auth);
+  const dispatc = useDispatch();
   const { state, dispatch } = AppState();
   const { cart } = state;
-
   const router = useRouter();
   const [cartItemsCount, setCartItemsCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const data = JSON.parse(window.localStorage.getItem("user"));
-    setUser(data);
-  }, []);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -34,10 +31,7 @@ const Navbar = () => {
   }, [cart.cartItems]);
 
   const handleLogout = () => {
-    Cookies.remove("token");
-    window.localStorage.removeItem("user");
-    Cookies.remove("cart");
-    dispatch({ type: "CART_RESET" });
+    dispatc(logout("token"));
     router.push("/login");
   };
 
@@ -97,7 +91,7 @@ const Navbar = () => {
             </Link>
           </li>
           <li className="pl-4 py-4">
-            {user ? (
+            {token ? (
               <Menu as="div" className="relative inline-block">
                 <Menu.Button>{user?.name.split(" ")[0]}</Menu.Button>
                 <Menu.Items
@@ -114,7 +108,7 @@ const Navbar = () => {
                       Order History
                     </Link>
                   </Menu.Item>
-                  {user.isAdmin && (
+                  {user?.isAdmin && (
                     <Menu.Item>
                       <Link className="dropdown-link" href="/admin/dashboard">
                         Admin Dashboard
@@ -175,9 +169,8 @@ const Navbar = () => {
               onClick={toggleMenu}
               className="p-4 text-4xl hover:text-gray-500"
             >
-              {user ? (
+              {token ? (
                 <Menu as="div" className="relative inline-block">
-                  <Menu.Button></Menu.Button>
                   <Menu.Items
                     as="div"
                     className="absolute right-0 w-56 origin-top-right bg-white  shadow-lg "

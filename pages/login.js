@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import Layout from "../components/Layout";
 import { getError } from "../utils/error";
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline";
@@ -8,8 +9,10 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import axios from "../utils/axiosInstance.js";
 import Cookies from "js-cookie";
+import { setToken } from "../store/slices/authSlice";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const [hidden, setHidden] = useState(true);
 
   const router = useRouter();
@@ -29,11 +32,6 @@ const Login = () => {
 
   const submitHandler = async ({ email, password }) => {
     try {
-      // const result = await signIn("credentials", {
-      //   redirect: false,
-      //   email,
-      //   password,
-      // });
       const config = { "Content-Type": "application/json" };
       const { data } = await axios.post(
         "/api/users/login",
@@ -43,7 +41,9 @@ const Login = () => {
       if (data.error) {
         toast.error(data.error);
       }
-      window.localStorage.setItem("user", JSON.stringify(data));
+      console.log(data);
+      Cookies.set("token", data.token);
+      dispatch(setToken(data.token));
       toast.success("You've logged in successfully.");
       router.push(redirect || "/");
     } catch (err) {
