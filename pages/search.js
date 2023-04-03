@@ -8,6 +8,8 @@ import { XCircleIcon } from "@heroicons/react/24/outline";
 import ProductItem from "../components/ProductItem";
 import Product from "../models/Product";
 import db from "../utils/db";
+import { useDispatch, useSelector } from "react-redux";
+import { addCart } from "../store/slices/cartSlice";
 
 const PAGE_SIZE = 3;
 
@@ -89,16 +91,17 @@ export default function Search(props) {
     filterSearch({ rating: e.target.value });
   };
 
-  const { state, dispatch } = useContext(Store);
+  const dispatch = useDispatch();
+  const { cart } = useSelector((state) => state.cart);
   const addToCartHandler = async (product) => {
-    const existItem = state.cart.cartItems.find((x) => x._id === product._id);
+    const existItem = cart.cartItems.find((x) => x._id === product._id);
     const quantity = existItem ? existItem.quantity + 1 : 1;
     const { data } = await axios.get(`/api/products/${product._id}`);
     if (data.countInStock < quantity) {
       toast.error("Sorry. Product is out of stock");
       return;
     }
-    dispatch({ type: "CART_ADD_ITEM", payload: { ...product, quantity } });
+    dispatch(addCart({ ...product, quantity }));
     router.push("/cart");
   };
   return (

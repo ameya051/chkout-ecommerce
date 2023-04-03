@@ -3,20 +3,22 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { Menu } from "@headlessui/react";
 import React, { useEffect, useState } from "react";
-import { AppState } from "../utils/Store";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Cookies from "js-cookie";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../store/slices/authSlice";
+import { resetCart } from "../store/slices/cartSlice";
 
 const Navbar = () => {
   const { token, user } = useSelector((state) => state.auth);
-  const dispatc = useDispatch();
-  const { state, dispatch } = AppState();
-  const { cart } = state;
+  const { cart } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+
   const router = useRouter();
+
   const [cartItemsCount, setCartItemsCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const [query, setQuery] = useState("");
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -31,8 +33,11 @@ const Navbar = () => {
   }, [cart.cartItems]);
 
   const handleLogout = () => {
-    dispatc(logout("token"));
-    router.push("/login");
+    Cookies.remove("token");
+    Cookies.remove("cart");
+    dispatch(logout());
+    dispatch(resetCart());
+    // router.push("/login");
   };
 
   const submitHandler = (e) => {
@@ -52,6 +57,7 @@ const Navbar = () => {
           className="mx-auto flex w-full justify-center"
         >
           <input
+            onChange={(e) => setQuery(e.target.value)}
             type="search"
             className="rounded-tr-none rounded-br-none p-1 text-md focus:ring-0"
             placeholder="Search products"

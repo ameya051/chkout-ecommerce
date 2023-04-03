@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Navbar from "./Navbar";
 import ScrollToTopButton from "./ScrollToTop";
+import Footer from "./Footer";
 
 const Layout = ({ title, children }) => {
   return (
@@ -14,9 +15,7 @@ const Layout = ({ title, children }) => {
       <div className="flex min-h-screen flex-col justify-between">
         <Navbar />
         <main className="container m-auto mt-4 md:mt-8 px-4 md:px-24">{children}</main>
-        <footer className="flex h-20 justify-center shadow-inner bg-gray-100">
-          <div className="flex justify-center items-center">© 2023, By Ameya Shrivastava</div>
-        </footer>
+        <Footer />
         <ScrollToTopButton/>
       </div>
     </>

@@ -4,7 +4,8 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import CheckoutWizard from "../components/CheckoutWizard";
 import Layout from "../components/Layout";
-import { AppState } from "../utils/Store";
+import { useDispatch, useSelector } from "react-redux";
+import { saveShippingAdd } from "../store/slices/cartSlice";
 
 export default function Shipping() {
   const {
@@ -14,8 +15,9 @@ export default function Shipping() {
     setValue,
   } = useForm();
 
-  const { state, dispatch } = AppState();
-  const { cart } = state;
+  const { cart } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+
   const { shippingAddress } = cart;
 
   const router = useRouter();
@@ -29,10 +31,7 @@ export default function Shipping() {
   }, [setValue, shippingAddress]);
 
   const submitHandler = ({ fullName, address, city, postalCode, country }) => {
-    dispatch({
-      type: "SAVE_SHIPPING_ADDRESS",
-      payload: { fullName, address, city, postalCode, country },
-    });
+    dispatch(saveShippingAdd({ fullName, address, city, postalCode, country }));
 
     Cookies.set(
       "cart",
@@ -47,7 +46,6 @@ export default function Shipping() {
         },
       })
     );
-
     router.push("/payment");
   };
 
@@ -133,5 +131,3 @@ export default function Shipping() {
     </Layout>
   );
 }
-
-Shipping.auth = true;

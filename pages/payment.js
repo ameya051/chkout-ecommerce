@@ -5,11 +5,15 @@ import { useRouter } from "next/router";
 import { AppState } from "../utils/Store";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { savePaymentMethod } from "../store/slices/cartSlice";
 
 export default function Payment() {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
-  const { state, dispatch } = AppState();
-  const { cart } = state;
+  // const { state, dispatch } = AppState();
+  // const { cart } = state;
+  const dispatch=useDispatch();
+  const {cart}=useSelector((state)=>state.cart)
   const { shippingAddress, paymentMethod } = cart;
   const router = useRouter();
 
@@ -18,7 +22,7 @@ export default function Payment() {
     if (!selectedPaymentMethod) {
       return toast.error("Payment method is required");
     }
-    dispatch({ type: "SAVE_PAYMENT_METHOD", payload: selectedPaymentMethod });
+    dispatch(savePaymentMethod(selectedPaymentMethod))
     Cookies.set(
       "cart",
       JSON.stringify({
@@ -42,7 +46,7 @@ export default function Payment() {
       <CheckoutWizard activeStep={2} />
       <form className="mx-auto max-w-screen-md" onSubmit={submitHandler}>
         <h1 className="mb-4 text-xl text-center">Payment Method</h1>
-        {["Stripe", "Cash On Delivery"].map((payment) => (
+        {["Stripe", "Razorpay", "Cash On Delivery"].map((payment) => (
           <div key={payment} className="mb-4">
             <input
               name="paymentMethod"

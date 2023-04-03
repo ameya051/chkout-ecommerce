@@ -3,15 +3,17 @@ import Link from "next/link";
 import React from "react";
 import { XCircleIcon } from "@heroicons/react/24/outline";
 import Layout from "../components/Layout";
-import { AppState } from "../utils/Store";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import dynamic from "next/dynamic";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { addCart, removeItem } from "../store/slices/cartSlice";
 
 const Cart = () => {
-  const { state, dispatch } = AppState();
-  const { cart } = state;
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.auth);
+  const { cart } = useSelector((state) => state.cart);
   const { cartItems } = cart;
 
   const router = useRouter();
@@ -23,7 +25,7 @@ const Cart = () => {
     if (data.countInStock < quantity) {
       return toast.error("Product is out of stock.");
     } else {
-      dispatch({ type: "CART_ADD_ITEM", payload: { ...item, quantity } });
+      dispatch(addCart({ ...item, quantity }));
     }
   };
 
@@ -44,12 +46,12 @@ const Cart = () => {
       });
       return;
     } else {
-      dispatch({ type: "CART_ADD_ITEM", payload: { ...item, quantity } });
+      dispatch(addCart({ ...item, quantity }));
     }
   };
 
   const handleRemoveItem = (item) => {
-    dispatch({ type: "CART_REMOVE_ITEM", payload: item });
+    dispatch(removeItem(item));
   };
 
   return (
@@ -147,7 +149,11 @@ const Cart = () => {
               </li>
               <li>
                 <button
-                  onClick={() => router.push("login?redirect=/shipping")}
+                  onClick={() => {
+                    token
+                      ? router.push("/shipping")
+                      : router.push("login?redirect=/shipping");
+                  }}
                   className="primary-button w-full"
                 >
                   Check Out

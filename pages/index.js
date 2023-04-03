@@ -9,19 +9,24 @@ import { AppState } from "../utils/Store";
 import axios from '../utils/axiosInstance.js';
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { useDispatch, useSelector } from "react-redux";
+import { addCart } from "../store/slices/cartSlice";
 
 export default function Home({ products, featuredProducts }) {
-  const { state, dispatch } = AppState();
-  const { cart } = state;
+  // const { state, dispatch } = AppState();
+  // const { cart } = state;
+  const dispatch=useDispatch();
+  const {cart} = useSelector((state)=>state.cart)
   const addToCartHandler = async (product) => {
     const existItem = cart.cartItems.find((x) => x.slug === product.slug);
     const quantity = existItem ? existItem.quantity + 1 : 1;
-    const { data } = await axios.get(`/api/products/${product._id}`);
+    // const { data } = await axios.get(`/api/products/${product._id}`);
 
-    if (data.countInStock < quantity) {
+    if (product.countInStock < quantity) {
       return toast.error("Sorry. Product is out of stock");
     }
-    dispatch({ type: "CART_ADD_ITEM", payload: { ...product, quantity } });
+    // dispatch({ type: "CART_ADD_ITEM", payload: { ...product, quantity } });
+    dispatch(addCart({ ...product, quantity }))
 
     toast.success("Product added to the cart");
   };

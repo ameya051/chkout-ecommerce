@@ -31,8 +31,7 @@ export const authSlice = createSlice({
       state.token = payload;
       state.user = jwtDecode(payload);
     },
-    logout: (state, {payload}) => {
-      Cookies.remove(payload);
+    logout: (state) => {
       state.user = null;
       state.token = null;
     },

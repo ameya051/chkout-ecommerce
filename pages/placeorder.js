@@ -9,10 +9,13 @@ import { toast } from "react-toastify";
 import { getError } from "../utils/error";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Placeorder() {
-  const { state, dispatch } = AppState();
-  const { cart } = state;
+  const dispatch=useDispatch()
+  const {cart}=useSelector((state)=>state.cart)
+  // const { state, dispatch } = AppState();
+  // const { cart } = state;
   const { cartItems, shippingAddress, paymentMethod } = cart;
 
   const [loading, setLoading] = useState(false);
