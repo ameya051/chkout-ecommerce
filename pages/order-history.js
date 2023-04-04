@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from "react";
-import axios from "axios";
+import axios from "../utils/axiosInstance.js";
 import getError from "../utils/error";
 import Layout from "../components/Layout";
 import Link from "next/link";
@@ -18,7 +18,6 @@ function reducer(state, action) {
 }
 
 export default function OrderHistory() {
-  // eslint-disable-next-line no-unused-vars
   const [{ loading, error, orders }, dispatch] = useReducer(reducer, {
     loading: true,
     orders: [],
@@ -37,6 +36,7 @@ export default function OrderHistory() {
     };
     fetchOrders();
   }, []);
+
   return (
     <Layout title="Order History">
       <h1 className="mb-4 text-xl">Order History</h1>

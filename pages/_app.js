@@ -6,7 +6,6 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import "../styles/globals.css";
-import { StoreProvider } from "../utils/Store";
 import store from "../store/index.js";
 
 export default function App({ Component, pageProps }) {
@@ -29,12 +28,10 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <Provider store={store}>
-        <StoreProvider>
           <PayPalScriptProvider deferLoading={true}>
             <Component {...pageProps} />
           </PayPalScriptProvider>
-          <ToastContainer position="bottom-right" limit={1} />
-        </StoreProvider>
+          <ToastContainer position="bottom-right" />
       </Provider>
     </>
   );

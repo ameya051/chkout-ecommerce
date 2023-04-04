@@ -5,7 +5,7 @@ import Layout from "../components/Layout";
 import { getError } from "../utils/error";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-import axios from "axios";
+import axios from "../utils/axiosInstance.js";
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline";
 
 export default function Register() {
@@ -44,7 +44,8 @@ export default function Register() {
       if (data.error) {
         toast.error(data.error);
       }
-      
+      toast.success("Registered successfully!")
+      router.push("/login")
     } catch (err) {
       toast.error(getError(err));
     }

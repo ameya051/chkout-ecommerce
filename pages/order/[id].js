@@ -1,13 +1,14 @@
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
-import axios from "axios";
-import { useSession } from "next-auth/react";
+import axios from "../../utils/axiosInstance.js";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 import { useEffect, useReducer } from "react";
 import { toast } from "react-toastify";
 import Layout from "../../components/Layout";
 import { getError } from "../../utils/error";
+import { useSelector } from "react-redux";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -43,8 +44,9 @@ function reducer(state, action) {
       state;
   }
 }
+
 function OrderScreen() {
-  const { data: session } = useSession();
+  const { user } = useSelector((state) => state.auth);
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
   const { query } = useRouter();
@@ -72,6 +74,7 @@ function OrderScreen() {
       try {
         dispatch({ type: "FETCH_REQUEST" });
         const { data } = await axios.get(`/api/orders/${orderId}`);
+        console.log(data);
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
@@ -91,20 +94,21 @@ function OrderScreen() {
         dispatch({ type: "DELIVER_RESET" });
       }
     } else {
-      const loadPaypalScript = async () => {
-        const { data: clientId } = await axios.get("/api/keys/paypal");
-        paypalDispatch({
-          type: "resetOptions",
-          value: {
-            "client-id": clientId,
-            currency: "USD",
-          },
-        });
-        paypalDispatch({ type: "setLoadingStatus", value: "pending" });
-      };
-      loadPaypalScript();
+      // const loadPaypalScript = async () => {
+      //   const { data: clientId } = await axios.get("/api/keys/paypal");
+      //   paypalDispatch({
+      //     type: "resetOptions",
+      //     value: {
+      //       "client-id": clientId,
+      //       currency: "USD",
+      //     },
+      //   });
+      //   paypalDispatch({ type: "setLoadingStatus", value: "pending" });
+      // };
+      // loadPaypalScript();
     }
   }, [order, orderId, paypalDispatch, successDeliver, successPay]);
+
   const {
     shippingAddress,
     paymentMethod,
@@ -124,7 +128,7 @@ function OrderScreen() {
       .create({
         purchase_units: [
           {
-            amount: { value: (totalPrice/80) },
+            amount: { value: totalPrice / 80 },
           },
         ],
       })
@@ -234,8 +238,7 @@ function OrderScreen() {
                       <td className=" p-5 text-right">{item.quantity}</td>
                       <td className="p-5 text-right">${item.price}</td>
                       <td className="p-5 text-right">
-                      {item.quantity * item.price}
-                      ${item.quantity * item.price}
+                        ${item.quantity * item.price}
                       </td>
                     </tr>
                   ))}
@@ -271,7 +274,7 @@ function OrderScreen() {
                     <div>${totalPrice}</div>
                   </div>
                 </li>
-                {!isPaid && (
+                { paymentMethod!=="Cash On Delivery" && !isPaid && (
                   <li>
                     {isPending ? (
                       <div>Loading...</div>
@@ -287,7 +290,7 @@ function OrderScreen() {
                     {loadingPay && <div>Loading...</div>}
                   </li>
                 )}
-                {session.user.isAdmin && order.isPaid && !order.isDelivered && (
+                {user?.isAdmin && order?.isPaid && !order.isDelivered && (
                   <li>
                     {loadingDeliver && <div>Loading...</div>}
                     <button
@@ -307,5 +310,4 @@ function OrderScreen() {
   );
 }
 
-OrderScreen.auth = true;
-export default OrderScreen;
+export default dynamic(() => Promise.resolve(OrderScreen), { ssr: false });

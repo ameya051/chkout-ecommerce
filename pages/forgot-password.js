@@ -1,10 +1,9 @@
-import axios from "axios";
+import axios from "../utils/axiosInstance.js";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Layout from "../components/Layout.js";
 import { getError } from "../utils/error.js";
-
 
 const ForgotPassword = () => {
   const [showLoading, setShowLoading] = useState(false); // to display loader after user submits the email to reset password
@@ -26,7 +25,7 @@ const ForgotPassword = () => {
         },
       };
       const { data } = await axios.post(
-        `http://localhost:5000/api/users/reset`,
+        `/api/users/reset`,
         { email: email },
         config
       );

@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
-import Layout from "../components/Layout";
-import CheckoutWizard from "../components/CheckoutWizard";
-import { AppState } from "../utils/Store";
+import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 import { toast } from "react-toastify";
-import { getError } from "../utils/error";
-import axios from "axios";
 import Cookies from "js-cookie";
-import { useDispatch, useSelector } from "react-redux";
+import Layout from "../components/Layout";
+import axios from "../utils/axiosInstance.js";
+import { getError } from "../utils/error";
+import CheckoutWizard from "../components/CheckoutWizard";
+import { clearCart } from "../store/slices/cartSlice";
 
-export default function Placeorder() {
-  const dispatch=useDispatch()
-  const {cart}=useSelector((state)=>state.cart)
-  // const { state, dispatch } = AppState();
-  // const { cart } = state;
+function Placeorder() {
+  const dispatch = useDispatch();
+  const { cart } = useSelector((state) => state.cart);
   const { cartItems, shippingAddress, paymentMethod } = cart;
 
   const [loading, setLoading] = useState(false);
@@ -26,7 +25,7 @@ export default function Placeorder() {
 
   const itemsPrice = round2(
     cartItems.reduce((a, c) => a + c.quantity * c.price, 0)
-  ); // 123.4567 => 123.46
+  ); // to round off price i.e. 123.4567 => 123.46
 
   const shippingPrice = itemsPrice > 200 ? 0 : 15;
   const taxPrice = round2(itemsPrice * 0.15);
@@ -39,7 +38,7 @@ export default function Placeorder() {
   const handlePlaceOrder = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.post("/api/order", {
+      const { data } = await axios.post("/api/orders", {
         orderItems: cartItems,
         shippingAddress,
         paymentMethod,
@@ -48,8 +47,9 @@ export default function Placeorder() {
         taxPrice,
         totalPrice,
       });
+      console.log(data);
       setLoading(false);
-      dispatch({ type: "CART_CLEAR_ITEMS" });
+      dispatch(clearCart());
       Cookies.set(
         "cart",
         JSON.stringify({
@@ -187,4 +187,4 @@ export default function Placeorder() {
   );
 }
 
-Placeorder.auth = true;
+export default dynamic(() => Promise.resolve(Placeorder), { ssr: false });
