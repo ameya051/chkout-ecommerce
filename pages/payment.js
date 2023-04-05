@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import CheckoutWizard from "../components/CheckoutWizard";
 import { useRouter } from "next/router";
-import { AppState } from "../utils/Store";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
@@ -35,9 +34,12 @@ export default function Payment() {
   };
 
   useEffect(() => {
-    if (!shippingAddress.address) {
-      return router.push("/shipping");
+    function check(){
+      if (!shippingAddress?.address) {
+        return router.push("/shipping");
+      }
     }
+    check();
     setSelectedPaymentMethod(paymentMethod || "");
   }, [paymentMethod, router, shippingAddress.address]);
 

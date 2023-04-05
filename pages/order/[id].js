@@ -1,14 +1,17 @@
-import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
-import axios from "../../utils/axiosInstance.js";
+import { useEffect, useReducer } from "react";
+import { useSelector } from "react-redux";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
-import { useEffect, useReducer } from "react";
+import { useRouter } from "next/router";
+// import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import axios from "../../utils/axiosInstance.js";
 import { toast } from "react-toastify";
 import Layout from "../../components/Layout";
 import { getError } from "../../utils/error";
-import { useSelector } from "react-redux";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import CheckoutForm from "../../components/CheckoutForm.js";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -44,10 +47,15 @@ function reducer(state, action) {
       state;
   }
 }
+const STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_KEY;
+const stripePromise = loadStripe(
+  "pk_test_51KYnrNSCpHtI9ol0sctWXQOsIHGkl5qyAzHmyLdLHbzrvlPj4TqTy1mSU19MsmPEhVuMSwtVB703q1Woyd8Pc9YI007mFZCGhv"
+);
 
 function OrderScreen() {
   const { user } = useSelector((state) => state.auth);
-  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
+
+  // const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
   const { query } = useRouter();
   const orderId = query.id;
@@ -74,7 +82,6 @@ function OrderScreen() {
       try {
         dispatch({ type: "FETCH_REQUEST" });
         const { data } = await axios.get(`/api/orders/${orderId}`);
-        console.log(data);
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
@@ -107,7 +114,7 @@ function OrderScreen() {
       // };
       // loadPaypalScript();
     }
-  }, [order, orderId, paypalDispatch, successDeliver, successPay]);
+  }, [order, orderId, successDeliver, successPay]);
 
   const {
     shippingAddress,
@@ -220,20 +227,15 @@ function OrderScreen() {
                 <tbody>
                   {orderItems.map((item) => (
                     <tr key={item._id} className="border-b">
-                      <td>
-                        <Link
-                          className="flex items-center"
-                          href={`/product/${item.slug}`}
-                        >
-                          <Image
-                            src={item.image}
-                            alt={item.name}
-                            width={50}
-                            height={50}
-                          ></Image>
-                          &nbsp;
-                          {item.name}
-                        </Link>
+                      <td className="flex items-center">
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          width={50}
+                          height={50}
+                        ></Image>
+                        &nbsp;
+                        {item.name}
                       </td>
                       <td className=" p-5 text-right">{item.quantity}</td>
                       <td className="p-5 text-right">${item.price}</td>
@@ -274,21 +276,19 @@ function OrderScreen() {
                     <div>${totalPrice}</div>
                   </div>
                 </li>
-                { paymentMethod!=="Cash On Delivery" && !isPaid && (
-                  <li>
-                    {isPending ? (
-                      <div>Loading...</div>
-                    ) : (
-                      <div className="w-full">
-                        <PayPalButtons
-                          createOrder={createOrder}
-                          onApprove={onApprove}
-                          onError={onError}
-                        ></PayPalButtons>
-                      </div>
+                {!isPaid && (
+                  <>
+                    {paymentMethod === "Stripe" && (
+                      <li>
+                        <Elements stripe={stripePromise}>
+                          <CheckoutForm
+                            price={totalPrice * 100}
+                            orderID={orderId}
+                          />
+                        </Elements>
+                      </li>
                     )}
-                    {loadingPay && <div>Loading...</div>}
-                  </li>
+                  </>
                 )}
                 {user?.isAdmin && order?.isPaid && !order.isDelivered && (
                   <li>
