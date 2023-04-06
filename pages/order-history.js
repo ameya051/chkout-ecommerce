@@ -74,7 +74,7 @@ export default function OrderHistory() {
                       : "not delivered"}
                   </td>
                   <td className=" p-5 ">
-                    <Link href={`/order/${order._id}`} passHref>
+                    <Link className="hover:underline" href={`/order/${order._id}`} passHref>
                       Details
                     </Link>
                   </td>

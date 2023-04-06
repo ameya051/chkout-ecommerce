@@ -100,19 +100,6 @@ function OrderScreen() {
       if (successDeliver) {
         dispatch({ type: "DELIVER_RESET" });
       }
-    } else {
-      // const loadPaypalScript = async () => {
-      //   const { data: clientId } = await axios.get("/api/keys/paypal");
-      //   paypalDispatch({
-      //     type: "resetOptions",
-      //     value: {
-      //       "client-id": clientId,
-      //       currency: "USD",
-      //     },
-      //   });
-      //   paypalDispatch({ type: "setLoadingStatus", value: "pending" });
-      // };
-      // loadPaypalScript();
     }
   }, [order, orderId, successDeliver, successPay]);
 
@@ -129,40 +116,6 @@ function OrderScreen() {
     isDelivered,
     deliveredAt,
   } = order;
-
-  function createOrder(data, actions) {
-    return actions.order
-      .create({
-        purchase_units: [
-          {
-            amount: { value: totalPrice / 80 },
-          },
-        ],
-      })
-      .then((orderID) => {
-        return orderID;
-      });
-  }
-
-  function onApprove(data, actions) {
-    return actions.order.capture().then(async function (details) {
-      try {
-        dispatch({ type: "PAY_REQUEST" });
-        const { data } = await axios.put(
-          `/api/orders/${order._id}/pay`,
-          details
-        );
-        dispatch({ type: "PAY_SUCCESS", payload: data });
-        toast.success("Order is paid successgully");
-      } catch (err) {
-        dispatch({ type: "PAY_FAIL", payload: getError(err) });
-        toast.error(getError(err));
-      }
-    });
-  }
-  function onError(err) {
-    toast.error(getError(err));
-  }
 
   async function deliverOrderHandler() {
     try {
@@ -227,15 +180,17 @@ function OrderScreen() {
                 <tbody>
                   {orderItems.map((item) => (
                     <tr key={item._id} className="border-b">
-                      <td className="flex items-center">
-                        <Image
-                          src={item.image}
-                          alt={item.name}
-                          width={50}
-                          height={50}
-                        ></Image>
-                        &nbsp;
-                        {item.name}
+                      <td className="py-1">
+                        <Link className="flex items-center" href={`/product/${item.slug}`}>
+                          <Image
+                            src={item.image}
+                            alt={item.name}
+                            width={50}
+                            height={50}
+                          />
+                          &nbsp;
+                          {item.name}
+                        </Link>
                       </td>
                       <td className=" p-5 text-right">{item.quantity}</td>
                       <td className="p-5 text-right">${item.price}</td>

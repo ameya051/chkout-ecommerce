@@ -2,7 +2,6 @@ import Router from "next/router";
 import { useEffect } from "react";
 import { Provider } from "react-redux";
 import NProgress from "nprogress";
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import "../styles/globals.css";
@@ -28,10 +27,8 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <Provider store={store}>
-          <PayPalScriptProvider deferLoading={true}>
-            <Component {...pageProps} />
-          </PayPalScriptProvider>
-          <ToastContainer position="bottom-right" />
+        <Component {...pageProps} />
+        <ToastContainer position="bottom-right" />
       </Provider>
     </>
   );

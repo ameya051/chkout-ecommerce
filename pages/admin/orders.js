@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import axios from "axios";
+import axios from "../../utils/axiosInstance.js";
 import Link from "next/link";
 import React, { useEffect, useReducer } from "react";
 import Layout from "../../components/Layout";
@@ -29,7 +29,7 @@ export default function Orders() {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/admin/orders`);
+        const { data } = await axios.get(`/api/orders/admin`);
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
@@ -47,8 +47,8 @@ export default function Orders() {
               <Link href="/admin/dashboard">Dashboard</Link>
             </li>
             <li>
-              <Link href="/admin/orders">
-                <a className="font-bold">Orders</a>
+              <Link className="font-bold" href="/admin/orders">
+                Orders
               </Link>
             </li>
             <li>

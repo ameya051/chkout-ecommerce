@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import axiosInstance from "../utils/axiosInstance";
 
 const CheckoutForm = ({ price, orderID }) => {
@@ -9,7 +9,6 @@ const CheckoutForm = ({ price, orderID }) => {
   const stripe = useStripe();
   const elements = useElements();
 
-  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
   // STEP 1: create a payment intent and getting the secret
@@ -21,7 +20,6 @@ const CheckoutForm = ({ price, orderID }) => {
         { price, email: user?.email },
         config
       );
-      console.log(data);
       setClientSecret(data.clientSecret);
     }
     if (user && price) getClientSecret();

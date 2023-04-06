@@ -3,7 +3,12 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { Menu } from "@headlessui/react";
 import React, { useEffect, useState } from "react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  ShoppingCartIcon,
+  UserCircleIcon,
+  Bars3Icon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import Cookies from "js-cookie";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../store/slices/authSlice";
@@ -37,7 +42,7 @@ const Navbar = () => {
     Cookies.remove("cart");
     dispatch(logout());
     dispatch(resetCart());
-    // router.push("/login");
+    router.push("/login");
   };
 
   const submitHandler = (e) => {
@@ -87,19 +92,28 @@ const Navbar = () => {
 
         <ul className="hidden sm:flex">
           <li className="py-4">
-            <Link href="/cart">
-              Cart
+            <Link className="flex" href="/cart">
+              <ShoppingCartIcon className="h-7 w-7 text-gray-900" />
               {cartItemsCount > 0 && (
-                <span className="ml-1 rounded-full bg-slate-800 px-2 py-1 text-xs font-bold text-white">
-                  {cartItemsCount}
-                </span>
+                // <span className="ml-1 rounded-full bg-slate-800 px-2 py-1 text-xs font-bold text-white">
+                //   {cartItemsCount}
+                // </span>
+                <sup className=" relative top-0 right-0 flex items-center justify-center w-4 h-4 bg-black rounded-full">
+                  <div className="text-xs leading-tight text-white">
+                    <p>{cartItemsCount}</p>
+                  </div>
+                </sup>
               )}
+              <p className="pl-1">Cart</p>
             </Link>
           </li>
           <li className="pl-4 py-4">
             {token ? (
               <Menu as="div" className="relative inline-block">
-                <Menu.Button>{user?.name.split(" ")[0]}</Menu.Button>
+                <Menu.Button as="button" className="flex">
+                  <UserCircleIcon className=" pr-1 h-7 w-7 text-gray-900" />
+                  {user?.name.split(" ")[0]}
+                </Menu.Button>
                 <Menu.Items
                   as="div"
                   className="absolute right-0 w-56 origin-top-right bg-white  shadow-lg "

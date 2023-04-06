@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import axios from "axios";
+import axios from "../../utils/axiosInstance.js";
 import Link from "next/link";
 import React, { useEffect, useReducer } from "react";
 import { Bar } from "react-chartjs-2";
@@ -49,7 +49,7 @@ export default function Dashboard() {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/admin/summary`);
+        const { data } = await axios.get(`/api/orders/admin/summary`);
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (error) {
         dispatch({ type: "FETCH_FAIL", payload: getError(error) });
@@ -58,6 +58,7 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
+  console.log();
   const data = {
     labels: summary.salesData.map((x) => {
       return x._id;
@@ -120,22 +121,39 @@ export default function Dashboard() {
             <div>
               <div className="grid grid-cols-1 md:grid-cols-4">
                 <div className="card m-5 p-5">
-                  <p className="text-3xl">${summary.ordersPrice} </p>
+                  <p className="text-3xl">
+                    $
+                    {summary.orders && summary.users[0]
+                      ? summary.orders[0].sales.toFixed(2)
+                      : 0}
+                  </p>
                   <p>Sales</p>
                   <Link href="/admin/orders">View sales</Link>
                 </div>
                 <div className="card m-5 p-5">
-                  <p className="text-3xl">{summary.ordersCount} </p>
+                  <p className="text-3xl">
+                    {summary.orders && summary.users[0]
+                      ? summary.orders[0].numOrders
+                      : 0}
+                  </p>
                   <p>Orders</p>
                   <Link href="/admin/orders">View orders</Link>
                 </div>
                 <div className="card m-5 p-5">
-                  <p className="text-3xl">{summary.productsCount} </p>
+                  <p className="text-3xl">
+                    {summary.products && summary.users[0]
+                      ? summary.products[0].numProducts
+                      : 0}
+                  </p>
                   <p>Products</p>
                   <Link href="/admin/products">View products</Link>
                 </div>
                 <div className="card m-5 p-5">
-                  <p className="text-3xl">{summary.usersCount} </p>
+                  <p className="text-3xl">
+                    {summary.users && summary.users[0]
+                      ? summary.users[0].numUsers
+                      : 0}
+                  </p>
                   <p>Users</p>
                   <Link href="/admin/users">View users</Link>
                 </div>

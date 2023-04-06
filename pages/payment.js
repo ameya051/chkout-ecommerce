@@ -9,8 +9,6 @@ import { savePaymentMethod } from "../store/slices/cartSlice";
 
 export default function Payment() {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
-  // const { state, dispatch } = AppState();
-  // const { cart } = state;
   const dispatch=useDispatch();
   const {cart}=useSelector((state)=>state.cart)
   const { shippingAddress, paymentMethod } = cart;
@@ -48,7 +46,7 @@ export default function Payment() {
       <CheckoutWizard activeStep={2} />
       <form className="mx-auto max-w-screen-md" onSubmit={submitHandler}>
         <h1 className="mb-4 text-xl text-center">Payment Method</h1>
-        {["Stripe", "Razorpay", "Cash On Delivery"].map((payment) => (
+        {["Stripe", "Cash On Delivery"].map((payment) => (
           <div key={payment} className="mb-4">
             <input
               name="paymentMethod"

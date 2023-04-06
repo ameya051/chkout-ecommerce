@@ -17,12 +17,6 @@ const Login = () => {
 
   const router = useRouter();
   const { redirect } = router.query;
-  // useEffect(() => {
-  //   const user = window.localStorage.getItem('user')
-  //   if (user) {
-  //     router.push(redirect || "/");
-  //   }
-  // }, [router, redirect]);
 
   const {
     handleSubmit,
