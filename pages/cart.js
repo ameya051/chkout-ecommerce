@@ -133,7 +133,7 @@ const Cart = () => {
               </tbody>
             </table>
           </div>
-          <div className="box p-5">
+          <div className="card p-5">
             <ul>
               <li>
                 <div className="pb-3 text-xl">

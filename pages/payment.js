@@ -10,6 +10,7 @@ import { savePaymentMethod } from "../store/slices/cartSlice";
 export default function Payment() {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
   const dispatch=useDispatch();
+  const {token}=useSelector((state)=>state.auth)
   const {cart}=useSelector((state)=>state.cart)
   const { shippingAddress, paymentMethod } = cart;
   const router = useRouter();
@@ -33,8 +34,9 @@ export default function Payment() {
 
   useEffect(() => {
     function check(){
+      // if()
       if (!shippingAddress?.address) {
-        return router.push("/shipping");
+        return router.replace("/shipping");
       }
     }
     check();
@@ -64,7 +66,7 @@ export default function Payment() {
         ))}
         <div className="mb-4 flex justify-between">
           <button
-            onClick={() => router.push("/shipping")}
+            onClick={() => router.replace("/shipping")}
             type="button"
             className="default-button"
           >

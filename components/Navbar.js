@@ -37,38 +37,39 @@ const Navbar = () => {
     );
   }, [cart.cartItems]);
 
-  const handleLogout = () => {
+  const handleLogout = (e) => {
+    e.preventDefault();
     Cookies.remove("token");
     Cookies.remove("cart");
     dispatch(logout());
     dispatch(resetCart());
-    router.push("/login");
+    router.replace("/login");
   };
 
   const submitHandler = (e) => {
     e.preventDefault();
-    router.push(`/search?query=${query}`);
+    router.push(query ? `/search/?query=${query}` : "/search");
   };
 
   return (
     <header className="sticky top-0 z-30 w-full bg-white">
       <nav className="flex h-20 items-center px-4 md:px-24 justify-between shadow-md">
-        <Link className="text-xl font-semibold" href="/">
+        <Link className="text-xl font-semibold mr-2" href="/">
           ChkOut
         </Link>
 
         <form
           onSubmit={submitHandler}
-          className="mx-auto flex w-full justify-center"
+          className="mx-auto flex w-full h-10 justify-center"
         >
           <input
             onChange={(e) => setQuery(e.target.value)}
             type="search"
-            className="rounded-tr-none rounded-br-none p-1 text-md focus:ring-0"
+            className="rounded-none border-1 p-1 text focus:ring-0"
             placeholder="Search products"
           />
           <button
-            className="rounded rounded-tl-none rounded-bl-none bg-slate-800 hover:bg-slate-700 border p-1 text-sm dark:text-black"
+            className="rounded-none bg-slate-800 hover:bg-slate-700 border p-1 text-sm dark:text-black"
             type="submit"
             id="button-addon2"
           >
@@ -95,10 +96,7 @@ const Navbar = () => {
             <Link className="flex" href="/cart">
               <ShoppingCartIcon className="h-7 w-7 text-gray-900" />
               {cartItemsCount > 0 && (
-                // <span className="ml-1 rounded-full bg-slate-800 px-2 py-1 text-xs font-bold text-white">
-                //   {cartItemsCount}
-                // </span>
-                <sup className=" relative top-0 right-0 flex items-center justify-center w-4 h-4 bg-black rounded-full">
+                <sup className=" relative top-0 right-0 flex items-center justify-center w-4 h-4 bg-gray-800 rounded-full">
                   <div className="text-xs leading-tight text-white">
                     <p>{cartItemsCount}</p>
                   </div>
