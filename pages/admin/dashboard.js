@@ -14,6 +14,7 @@ import {
 } from "chart.js";
 import Layout from "../../components/Layout";
 import getError from "../../utils/error";
+import Loading from "../../components/Loading.js";
 
 Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 export const options = {
@@ -114,7 +115,7 @@ export default function Dashboard() {
         <div className="md:col-span-3">
           <h1 className="mb-4 text-2xl">Admin Dashboard</h1>
           {loading ? (
-            <div>Loading...</div>
+            <Loading />
           ) : error ? (
             <div className="alert-error">{error}</div>
           ) : (
@@ -128,7 +129,7 @@ export default function Dashboard() {
                       : 0}
                   </p>
                   <p>Sales</p>
-                  <Link href="/admin/orders">View sales</Link>
+                  <Link className="hover:underline" href="/admin/orders">View sales</Link>
                 </div>
                 <div className="card m-5 p-5">
                   <p className="text-3xl">
@@ -137,7 +138,7 @@ export default function Dashboard() {
                       : 0}
                   </p>
                   <p>Orders</p>
-                  <Link href="/admin/orders">View orders</Link>
+                  <Link className="hover:underline" href="/admin/orders">View orders</Link>
                 </div>
                 <div className="card m-5 p-5">
                   <p className="text-3xl">
@@ -146,7 +147,7 @@ export default function Dashboard() {
                       : 0}
                   </p>
                   <p>Products</p>
-                  <Link href="/admin/products">View products</Link>
+                  <Link className="hover:underline" href="/admin/products">View products</Link>
                 </div>
                 <div className="card m-5 p-5">
                   <p className="text-3xl">
@@ -155,7 +156,7 @@ export default function Dashboard() {
                       : 0}
                   </p>
                   <p>Users</p>
-                  <Link href="/admin/users">View users</Link>
+                  <Link className="hover:underline" href="/admin/users">View users</Link>
                 </div>
               </div>
               <h2 className="text-xl">Sales Report</h2>

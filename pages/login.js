@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Layout from "../components/Layout";
 import { getError } from "../utils/error";
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline";
@@ -66,7 +66,7 @@ const Login = () => {
               },
             })}
             id="email"
-            className="w-full"
+            className="w-full rounded-none border-gray-400 mt-2"
             autoFocus
           />
           {errors.email && (
@@ -82,7 +82,7 @@ const Login = () => {
               minLength: { value: 6, message: "password is more than 5 chars" },
             })}
             id="password"
-            className="w-full"
+            className="w-full rounded-none border-gray-400 mt-2"
             autoFocus
           />
           <button

@@ -52,8 +52,8 @@ const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-30 w-full bg-white">
-      <nav className="flex h-20 items-center px-4 md:px-24 justify-between shadow-md">
+    <header className="top-0 z-30 w-full bg-[#edeff1]">
+      <nav className="flex h-20 items-center px-4 md:px-24 justify-between">
         <Link className="text-xl font-semibold mr-2" href="/">
           ChkOut
         </Link>
