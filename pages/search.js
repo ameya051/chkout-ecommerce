@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import Layout from "../components/Layout";
+import Layout from "../components/layout/Layout";
 import { XCircleIcon } from "@heroicons/react/24/outline";
 import ProductItem from "../components/ProductItem";
 import { useDispatch, useSelector } from "react-redux";

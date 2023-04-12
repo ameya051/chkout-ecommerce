@@ -4,10 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-// import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import axios from "../../utils/axiosInstance.js";
 import { toast } from "react-toastify";
-import Layout from "../../components/Layout";
+import Layout from "../../components/layout/Layout";
 import { getError } from "../../utils/error";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
@@ -55,7 +54,6 @@ const stripePromise = loadStripe(
 function OrderScreen() {
   const { user } = useSelector((state) => state.auth);
 
-  // const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
   const { query } = useRouter();
   const orderId = query.id;
@@ -134,7 +132,7 @@ function OrderScreen() {
 
   return (
     <Layout title={`Order ${orderId}`}>
-      <h1 className="mb-4 text-xl">{`Order ${orderId}`}</h1>
+      <h1 className="mb-4 text-xl">{`Order ID: ${orderId}`}</h1>
       {loading ? (
         <div>Loading...</div>
       ) : error ? (

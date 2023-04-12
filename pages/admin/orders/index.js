@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
-import axios from "../../utils/axiosInstance.js";
+import axios from "../../../utils/axiosInstance.js";
 import Link from "next/link";
 import React, { useEffect, useReducer } from "react";
-import Layout from "../../components/Layout";
-import getError from "../../utils/error";
+import Layout from "../../../components/layout/Layout";
+import getError from "../../../utils/error";
+import Loading from "../../../components/Loading.js";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -39,23 +40,41 @@ export default function Orders() {
   }, []);
 
   return (
-    <Layout title="Admin Dashboard">
+    <Layout title="Admin Orders">
       <div className="grid md:grid-cols-4 md:gap-5">
         <div>
-          <ul>
-            <li>
-              <Link href="/admin/dashboard">Dashboard</Link>
+          <ul className="mt-4">
+            <li className="text-grey-900 transition-all duration-300 ease-in-out mb-12">
+              <Link
+                className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+                href="/admin/dashboard"
+              >
+                Dashboard
+              </Link>
             </li>
-            <li>
-              <Link className="font-bold" href="/admin/orders">
+            <li className="text-grey-900 transition-all duration-300 ease-in-out mb-12">
+              <Link
+                className="font-semibold bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+                href="/admin/orders"
+              >
                 Orders
               </Link>
             </li>
-            <li>
-              <Link href="/admin/products">Products</Link>
+            <li className="text-grey-900 transition-all duration-300 ease-in-out mb-12">
+              <Link
+                className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+                href="/admin/products"
+              >
+                Products
+              </Link>
             </li>
-            <li>
-              <Link href="/admin/users">Users</Link>
+            <li className="text-grey-900 transition-all duration-300 ease-in-out mb-12">
+              <Link
+                className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+                href="/admin/users"
+              >
+                Users
+              </Link>
             </li>
           </ul>
         </div>
@@ -63,7 +82,7 @@ export default function Orders() {
           <h1 className="mb-4 text-xl">Admin Orders</h1>
 
           {loading ? (
-            <div>Loading...</div>
+            <Loading />
           ) : error ? (
             <div className="alert-error">{error}</div>
           ) : (
@@ -102,8 +121,12 @@ export default function Orders() {
                           : "not delivered"}
                       </td>
                       <td className="p-5">
-                        <Link href={`/order/${order._id}`} passHref>
-                          Details
+                        <Link
+                          type="button"
+                          className="default-button"
+                          href={`/admin/orders/`}
+                        >
+                          Edit
                         </Link>
                       </td>
                     </tr>

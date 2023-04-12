@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
-import Layout from "../components/Layout";
+import Layout from "../components/layout/Layout";
 import axios from "../utils/axiosInstance.js";
 import { getError } from "../utils/error";
 import CheckoutWizard from "../components/CheckoutWizard";

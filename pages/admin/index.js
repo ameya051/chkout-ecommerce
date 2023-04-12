@@ -12,8 +12,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import Layout from "../../components/Layout";
-import getError from "../../utils/error";
+import Layout from "../../components/layout/Layout.js";
+import {getError} from "../../utils/error";
 import Loading from "../../components/Loading.js";
 
 Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -59,7 +59,6 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
-  console.log();
   const data = {
     labels: summary.salesData.map((x) => {
       return x._id;
@@ -75,10 +74,10 @@ export default function Dashboard() {
 
   return (
     <Layout title="Admin Dashboard">
-      <div className="grid  md:grid-cols-4 md:gap-5">
+      <div className="grid md:grid-cols-4 md:gap-5 max-w-full">
         <div>
           <ul className="mt-4">
-            <li className="group text-grey-900 transition-all duration-300 ease-in-out mb-12">
+            <li className="text-grey-900 transition-all duration-300 ease-in-out mb-12">
               <Link
                 className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
                 href="/admin/dashboard"
@@ -86,25 +85,25 @@ export default function Dashboard() {
                 Dashboard
               </Link>
             </li>
-            <li className="group text-grey-900 transition-all duration-300 ease-in-out mb-12">
+            <li className="text-grey-900 transition-all duration-300 ease-in-out mb-12">
               <Link
-                className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+                className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
                 href="/admin/orders"
               >
                 Orders
               </Link>
             </li>
-            <li className="group text-grey-900 transition-all duration-300 ease-in-out mb-12">
+            <li className="text-grey-900 transition-all duration-300 ease-in-out mb-12">
               <Link
-                className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+                className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
                 href="/admin/products"
               >
                 Products
               </Link>
             </li>
-            <li className="group text-grey-900 transition-all duration-300 ease-in-out mb-12">
+            <li className="text-grey-900 transition-all duration-300 ease-in-out mb-12">
               <Link
-                className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+                className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
                 href="/admin/users"
               >
                 Users
@@ -112,7 +111,7 @@ export default function Dashboard() {
             </li>
           </ul>
         </div>
-        <div className="md:col-span-3">
+        <div className="md:col-span-3 max-w-full">
           <h1 className="mb-4 text-2xl">Admin Dashboard</h1>
           {loading ? (
             <Loading />

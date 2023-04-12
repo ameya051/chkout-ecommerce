@@ -2,7 +2,7 @@ import axios from "../utils/axiosInstance.js";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import Layout from "../components/Layout.js";
+import Layout from "../components/layout/Layout.js";
 import { getError } from "../utils/error.js";
 
 const ForgotPassword = () => {

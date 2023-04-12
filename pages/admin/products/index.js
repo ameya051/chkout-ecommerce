@@ -1,17 +1,24 @@
-import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { toast } from "react-toastify";
-import Layout from "../../components/Layout";
-import { getError } from "../../utils/error";
+import Layout from "../../../components/layout/Layout";
+import { getError } from "../../../utils/error";
+import axiosInstance from "../../../utils/axiosInstance.js";
+import CreateProductModal from "../../../components/modals/CreateProductModal";
+import Loading from "../../../components/Loading.js";
 
 function reducer(state, action) {
   switch (action.type) {
     case "FETCH_REQUEST":
       return { ...state, loading: true, error: "" };
     case "FETCH_SUCCESS":
-      return { ...state, loading: false, products: action.payload, error: "" };
+      return {
+        ...state,
+        loading: false,
+        products: action.payload.products,
+        error: "",
+      };
     case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
 
@@ -21,7 +28,7 @@ function reducer(state, action) {
       return { ...state, loadingCreate: false };
     case "CREATE_FAIL":
       return { ...state, loadingCreate: false };
-      
+
     case "DELETE_REQUEST":
       return { ...state, loadingDelete: true };
     case "DELETE_SUCCESS":
@@ -37,6 +44,7 @@ function reducer(state, action) {
 }
 
 export default function Products() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
 
   const [
@@ -54,7 +62,7 @@ export default function Products() {
     }
     try {
       dispatch({ type: "CREATE_REQUEST" });
-      const { data } = await axios.post(`/api/admin/products`);
+      const { data } = await axiosInstance.post(`/api/admin/products`);
       dispatch({ type: "CREATE_SUCCESS" });
       toast.success("Product created successfully");
       router.push(`/admin/product/${data.product._id}`);
@@ -67,7 +75,8 @@ export default function Products() {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/admin/products`);
+        const { data } = await axiosInstance.get(`/api/admin/products`);
+        console.log(data);
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
@@ -87,7 +96,7 @@ export default function Products() {
     }
     try {
       dispatch({ type: "DELETE_REQUEST" });
-      await axios.delete(`/api/admin/products/${productId}`);
+      await axiosInstance.delete(`/api/admin/products/${productId}`);
       dispatch({ type: "DELETE_SUCCESS" });
       toast.success("Product deleted successfully");
     } catch (err) {
@@ -98,21 +107,40 @@ export default function Products() {
   return (
     <Layout title="Admin Products">
       <div className="grid md:grid-cols-4 md:gap-5">
+        {isModalOpen && <CreateProductModal onClose={() => setIsModalOpen(false)} />}
         <div>
-          <ul>
-            <li>
-              <Link href="/admin/dashboard">Dashboard</Link>
-            </li>
-            <li>
-              <Link href="/admin/orders">Orders</Link>
-            </li>
-            <li>
-              <Link href="/admin/products">
-                <a className="font-bold">Products</a>
+          <ul className="mt-4">
+            <li className="text-grey-900 transition-all duration-300 ease-in-out mb-12">
+              <Link
+                className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+                href="/admin/dashboard"
+              >
+                Dashboard
               </Link>
             </li>
-            <li>
-              <Link href="/admin/users">Users</Link>
+            <li className="text-grey-900 transition-all duration-300 ease-in-out mb-12">
+              <Link
+                className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+                href="/admin/orders"
+              >
+                Orders
+              </Link>
+            </li>
+            <li className="text-grey-900 transition-all duration-300 ease-in-out mb-12">
+              <Link
+                className="font-semibold bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+                href="/admin/products"
+              >
+                Products
+              </Link>
+            </li>
+            <li className="text-grey-900 transition-all duration-300 ease-in-out mb-12">
+              <Link
+                className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+                href="/admin/users"
+              >
+                Users
+              </Link>
             </li>
           </ul>
         </div>
@@ -122,14 +150,14 @@ export default function Products() {
             {loadingDelete && <div>Deleting item...</div>}
             <button
               disabled={loadingCreate}
-              onClick={createHandler}
+              onClick={() => setIsModalOpen(true)}
               className="primary-button"
             >
-              {loadingCreate ? "Loading" : "Create"}
+              {loadingCreate ? "Loading" : "Add New Product"}
             </button>
           </div>
           {loading ? (
-            <div>Loading...</div>
+            <Loading />
           ) : error ? (
             <div className="alert-error">{error}</div>
           ) : (
@@ -156,10 +184,12 @@ export default function Products() {
                       <td className=" p-5 ">{product.countInStock}</td>
                       <td className=" p-5 ">{product.rating}</td>
                       <td className=" p-5 ">
-                        <Link href={`/admin/product/${product._id}`}>
-                          <a type="button" className="default-button">
-                            Edit
-                          </a>
+                        <Link
+                          type="button"
+                          className="default-button"
+                          href={`/admin/products/${product._id}`}
+                        >
+                          Edit
                         </Link>
                         &nbsp;
                         <button

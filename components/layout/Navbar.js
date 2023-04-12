@@ -4,15 +4,18 @@ import { useRouter } from "next/router";
 import { Menu } from "@headlessui/react";
 import React, { useEffect, useState } from "react";
 import {
-  ShoppingCartIcon,
+  ShoppingBagIcon,
   UserCircleIcon,
   Bars3Icon,
   XMarkIcon,
+  UserIcon,
+  MagnifyingGlassIcon,
+  ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
 import Cookies from "js-cookie";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../store/slices/authSlice";
-import { resetCart } from "../store/slices/cartSlice";
+import { logout } from "../../store/slices/authSlice";
+import { resetCart } from "../../store/slices/cartSlice";
 
 const Navbar = () => {
   const { token, user } = useSelector((state) => state.auth);
@@ -23,6 +26,8 @@ const Navbar = () => {
 
   const [cartItemsCount, setCartItemsCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const toggleSearch = () => setIsSearchOpen(!isSearchOpen);
   const [query, setQuery] = useState("");
 
   const toggleMenu = () => {
@@ -52,65 +57,64 @@ const Navbar = () => {
   };
 
   return (
-    <header className="top-0 z-30 w-full bg-[#edeff1]">
+    <header className="sticky top-0 z-30 w-full bg-white">
       <nav className="flex h-20 items-center px-4 md:px-24 justify-between">
-        <Link className="text-xl font-semibold mr-2" href="/">
-          ChkOut
+        <button
+          onClick={toggleSearch}
+          className="inline-flex items-center border-b border-transparent hover:border-gray-300 focus:outline-none"
+        >
+          <MagnifyingGlassIcon className="w-5 h-5 mr-2" />
+          <span className="text-gray-500">Search...</span>
+        </button>
+        {isSearchOpen && (
+          <div className="fixed inset-0 z-50 bg-gray-800 bg-opacity-75 flex justify-center items-center">
+            <div className="bg-white rounded-none w-full p-6 absolute top-0">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-lg font-medium text-gray-900">Search</h2>
+                <button onClick={toggleSearch}>
+                  <XMarkIcon className="w-6 h-6 text-gray-500" />
+                </button>
+              </div>
+              <form className="flex flex-col" onSubmit={submitHandler}>
+                <label htmlFor="search-input" className="sr-only">
+                  Search
+                </label>
+                <input
+                  type="text"
+                  id="search-input"
+                  placeholder="Search..."
+                  className="border border-gray-300 rounded-md px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button type="submit" className="primary-button">
+                  Search
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
+
+        <Link href="/">
+          <h1 className="text-xl font-semibold mr-2 items-center">ChkOut</h1>
         </Link>
 
-        <form
-          onSubmit={submitHandler}
-          className="mx-auto flex w-full h-10 justify-center"
-        >
-          <input
-            onChange={(e) => setQuery(e.target.value)}
-            type="search"
-            className="rounded-none border-1 p-1 text focus:ring-0"
-            placeholder="Search products"
-          />
-          <button
-            className="rounded-none bg-slate-800 hover:bg-slate-700 border p-1 text-sm dark:text-black"
-            type="submit"
-            id="button-addon2"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="white"
-              aria-hidden="true"
-              className="h-5 w-5"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              ></path>
-            </svg>
-          </button>
-        </form>
-
-        <ul className="hidden sm:flex">
+        <ul className="hidden sm:flex sm:flex-row">
           <li className="py-4">
             <Link className="flex" href="/cart">
-              <ShoppingCartIcon className="h-7 w-7 text-gray-900" />
+              <ShoppingCartIcon className="pr-1 h-7 w-7 text-gray-900" />
               {cartItemsCount > 0 && (
-                <sup className=" relative top-0 right-0 flex items-center justify-center w-4 h-4 bg-gray-800 rounded-full">
+                <sup className=" relative top-0 right-0 flex items-center justify-center w-4 h-4 bg-[#1e293b] rounded-full">
                   <div className="text-xs leading-tight text-white">
                     <p>{cartItemsCount}</p>
                   </div>
                 </sup>
               )}
-              <p className="pl-1">Cart</p>
             </Link>
           </li>
           <li className="pl-4 py-4">
             {token ? (
               <Menu as="div" className="relative inline-block">
                 <Menu.Button as="button" className="flex">
-                  <UserCircleIcon className=" pr-1 h-7 w-7 text-gray-900" />
-                  {user?.name.split(" ")[0]}
+                  <UserIcon className=" pr-1 h-7 w-7  text-gray-900" />
                 </Menu.Button>
                 <Menu.Items
                   as="div"
@@ -128,7 +132,7 @@ const Navbar = () => {
                   </Menu.Item>
                   {user?.isAdmin && (
                     <Menu.Item>
-                      <Link className="dropdown-link" href="/admin/dashboard">
+                      <Link className="dropdown-link" href="/admin">
                         Admin Dashboard
                       </Link>
                     </Menu.Item>
@@ -145,8 +149,8 @@ const Navbar = () => {
                 </Menu.Items>
               </Menu>
             ) : (
-              <Link className="pl-4" href="/login">
-                Login
+              <Link className="hover:underline" href="/login">
+                <h6>Login</h6>
               </Link>
             )}
           </li>
@@ -183,50 +187,43 @@ const Navbar = () => {
             >
               <Link href="/cart">Cart</Link>
             </li>
-            <li
-              onClick={toggleMenu}
-              className="p-4 text-4xl hover:text-gray-500"
-            >
-              {token ? (
-                <Menu as="div" className="relative inline-block">
-                  <Menu.Items
-                    as="div"
-                    className="absolute right-0 w-56 origin-top-right bg-white  shadow-lg "
-                  >
-                    <Menu.Item>
-                      <Link className="dropdown-link" href="/profile">
-                        Profile
-                      </Link>
-                    </Menu.Item>
-                    <Menu.Item>
-                      <Link className="dropdown-link" href="/order-history">
-                        Order History
-                      </Link>
-                    </Menu.Item>
-                    {user.isAdmin && (
-                      <Menu.Item>
-                        <Link className="dropdown-link" href="/admin/dashboard">
-                          Admin Dashboard
-                        </Link>
-                      </Menu.Item>
-                    )}
-                    <Menu.Item>
-                      <Link
-                        className="dropdown-link"
-                        href="#"
-                        onClick={handleLogout}
-                      >
-                        Logout
-                      </Link>
-                    </Menu.Item>
-                  </Menu.Items>
-                </Menu>
-              ) : (
-                <Link className="pl-4" href="/login">
-                  Login
-                </Link>
-              )}
-            </li>
+            {token ? (
+              <>
+                <li
+                  onClick={toggleMenu}
+                  className="p-4 text-4xl hover:text-gray-500"
+                >
+                  <Link href="/profile">Profile</Link>
+                </li>
+                <li
+                  onClick={toggleMenu}
+                  className="p-4 text-4xl hover:text-gray-500"
+                >
+                  <Link href="/order-history">Order History</Link>
+                </li>
+                <li
+                  onClick={toggleMenu}
+                  className="p-4 text-4xl hover:text-gray-500"
+                >
+                  <Link href="/admin">Admin Dashboard</Link>
+                </li>
+                <li
+                  onClick={toggleMenu}
+                  className="p-4 text-4xl hover:text-gray-500"
+                >
+                  <Link href="#" onClick={handleLogout}>
+                    Logout
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <li
+                onClick={toggleMenu}
+                className="p-4 text-4xl hover:text-gray-500"
+              >
+                <Link href="/login">Login</Link>
+              </li>
+            )}
           </ul>
         </div>
       </nav>

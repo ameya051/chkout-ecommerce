@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import CheckoutWizard from "../components/CheckoutWizard";
-import Layout from "../components/Layout";
+import Layout from "../components/layout/Layout";
 import { useDispatch, useSelector } from "react-redux";
 import { saveShippingAdd } from "../store/slices/cartSlice";
 

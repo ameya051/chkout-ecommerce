@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { toast } from "react-toastify";
-import Layout from "../../components/Layout";
+import Layout from "../../components/layout/Layout";
 import axios from "../../utils/axiosInstance.js";
 import { useDispatch, useSelector } from "react-redux";
 import { addCart } from "../../store/slices/cartSlice";
@@ -77,7 +77,7 @@ const ProductScreen = (props) => {
                   </svg>
                   <a
                     href="#reviews"
-                    class="font-medium text-gray-600 hover:underline"
+                    className="font-medium text-gray-600 hover:underline"
                   >
                     ({product.numReviews})
                   </a>

@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import Layout from "../../components/Layout";
+import Layout from "../../components/layout/Layout";
 import { getError } from "../../utils/error";
 import axios from "axios";
 

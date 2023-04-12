@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { XCircleIcon } from "@heroicons/react/24/outline";
-import Layout from "../components/Layout";
+import { XCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import Layout from "../components/layout/Layout";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import dynamic from "next/dynamic";
@@ -124,7 +124,7 @@ const Cart = () => {
                             handleRemoveItem(item);
                           }}
                         >
-                          <XCircleIcon className="h-6 w-6"></XCircleIcon>
+                          <XMarkIcon className="h-7 w-7" />
                         </button>
                       </td>
                     </tr>

@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { getError } from "../utils/error";
 import axios from "axios";
-import Layout from "../components/Layout";
+import Layout from "../components/layout/Layout";
 
 export default function ProfileScreen() {
 

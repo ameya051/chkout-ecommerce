@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Layout from "../components/Layout";
+import Layout from "../components/layout/Layout";
 import { getError } from "../utils/error";
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/outline";
 import { useForm } from "react-hook-form";
@@ -123,6 +123,7 @@ const Login = () => {
         <div className="mb-4">
           <button className="primary-button">Login</button>
         </div>
+        <p className="text-sm">Admin email: admin@example.com Admin Password: 123456</p>
       </form>
     </Layout>
   );
