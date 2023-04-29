@@ -1,18 +1,18 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
-const CreateProductModal = ({ onClose }) => {
+const CreateProductModal = ({ onSubmit, onClose }) => {
   const initState = {
     name: "",
     slug: "",
     category: "",
-    image: null,
-    price: null,
+    image: undefined,
+    price: 0,
     brand: "",
     countInStock: 0,
     description: "",
     isFeatured: false,
-    featuredImage: null,
+    featuredImage: undefined,
   };
   const [formData, setFormData] = useState(initState);
 
@@ -36,9 +36,12 @@ const CreateProductModal = ({ onClose }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    
-    // Handle form submission
-    onClose();
+
+    const formDataObj = new FormData();
+    Object.keys(formData).forEach((key) => {
+      formDataObj.append(key, formData[key]);
+    });
+    onSubmit(formDataObj);
   };
 
   return (
@@ -47,7 +50,6 @@ const CreateProductModal = ({ onClose }) => {
         <div className="fixed inset-0 transition-opacity" aria-hidden="true">
           <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
-
         <div className="bg-white rounded-none overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <div className="p-6">
@@ -57,7 +59,6 @@ const CreateProductModal = ({ onClose }) => {
                   <XMarkIcon className="ml-4 h-6 w-6 text-gray-900 cursor-pointer" />
                 </div>
               </div>
-
               <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                 <div className="mb-4 sm:col-span-2">
                   <label
@@ -110,7 +111,6 @@ const CreateProductModal = ({ onClose }) => {
                     required
                   />
                 </div>
-
                 <div className="mb-4">
                   <label
                     htmlFor="category"
@@ -224,7 +224,6 @@ const CreateProductModal = ({ onClose }) => {
                     className="hidden"
                     accept="image/*"
                     onChange={handleInputChange}
-                    required
                   />
                   {formData.featuredImage && (
                     <img
@@ -255,7 +254,6 @@ const CreateProductModal = ({ onClose }) => {
                   Enter you text here...
                 </textarea>
               </div>
-
               <div className="mt-4">
                 <button type="submit" className="primary-button">
                   Submit

@@ -66,7 +66,7 @@ const Login = () => {
               },
             })}
             id="email"
-            className="w-full rounded-none border-gray-400 mt-2"
+            className="w-full rounded-none border-gray-300 mt-2"
             autoFocus
           />
           {errors.email && (
@@ -82,7 +82,7 @@ const Login = () => {
               minLength: { value: 6, message: "password is more than 5 chars" },
             })}
             id="password"
-            className="w-full rounded-none border-gray-400 mt-2"
+            className="w-full rounded-none border-gray-300 mt-2"
             autoFocus
           />
           <button

@@ -80,7 +80,7 @@ export default function Dashboard() {
             <li className="text-grey-900 transition-all duration-300 ease-in-out mb-12">
               <Link
                 className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
-                href="/admin/dashboard"
+                href="/admin"
               >
                 Dashboard
               </Link>
@@ -122,7 +122,7 @@ export default function Dashboard() {
               <div className="grid grid-cols-1 md:grid-cols-4">
                 <div className="card m-5 p-5">
                   <p className="text-3xl">
-                    $
+                  &#x20B9;
                     {summary.orders && summary.users[0]
                       ? summary.orders[0].sales.toFixed(2)
                       : 0}

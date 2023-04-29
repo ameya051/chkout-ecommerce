@@ -20,6 +20,7 @@ function reducer(state, action) {
       return { ...state, loading: false, order: action.payload, error: "" };
     case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
+
     case "PAY_REQUEST":
       return { ...state, loadingPay: true };
     case "PAY_SUCCESS":
@@ -46,14 +47,13 @@ function reducer(state, action) {
       state;
   }
 }
-const STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_KEY;
+
 const stripePromise = loadStripe(
   "pk_test_51KYnrNSCpHtI9ol0sctWXQOsIHGkl5qyAzHmyLdLHbzrvlPj4TqTy1mSU19MsmPEhVuMSwtVB703q1Woyd8Pc9YI007mFZCGhv"
 );
 
 function OrderScreen() {
   const { user } = useSelector((state) => state.auth);
-
 
   const { query } = useRouter();
   const orderId = query.id;
@@ -115,11 +115,25 @@ function OrderScreen() {
     deliveredAt,
   } = order;
 
+  async function setOrderPaidHandler() {
+    try {
+      dispatch({ type: "PAY_REQUEST" });
+      const { data } = await axios.patch(
+        `/api/admin/orders/set-paid/${order._id}`
+      );
+      dispatch({ type: "PAY_SUCCESS", payload: data });
+      toast.success("Order has been paid");
+    } catch (error) {
+      dispatch({ type: "PAY_FAIL", payload: getError(err) });
+      toast.error(getError(err));
+    }
+  }
+
   async function deliverOrderHandler() {
     try {
       dispatch({ type: "DELIVER_REQUEST" });
-      const { data } = await axios.put(
-        `/api/admin/orders/${order._id}/deliver`,
+      const { data } = await axios.patch(
+        `/api/admin/orders/set-delivered/${order._id}`,
         {}
       );
       dispatch({ type: "DELIVER_SUCCESS", payload: data });
@@ -170,8 +184,8 @@ function OrderScreen() {
                 <thead className="border-b">
                   <tr>
                     <th className="px-5 text-left">Item</th>
-                    <th className="    p-5 text-right">Quantity</th>
-                    <th className="  p-5 text-right">Price</th>
+                    <th className="p-5 text-right">Quantity</th>
+                    <th className="p-5 text-right">Price</th>
                     <th className="p-5 text-right">Subtotal</th>
                   </tr>
                 </thead>
@@ -179,7 +193,10 @@ function OrderScreen() {
                   {orderItems.map((item) => (
                     <tr key={item._id} className="border-b">
                       <td className="py-1">
-                        <Link className="flex items-center" href={`/product/${item.slug}`}>
+                        <Link
+                          className="flex items-center"
+                          href={`/product/${item.slug}`}
+                        >
                           <Image
                             src={item.image}
                             alt={item.name}
@@ -191,9 +208,9 @@ function OrderScreen() {
                         </Link>
                       </td>
                       <td className=" p-5 text-right">{item.quantity}</td>
-                      <td className="p-5 text-right">${item.price}</td>
+                      <td className="p-5 text-right">&#x20B9;{item.price}</td>
                       <td className="p-5 text-right">
-                        ${item.quantity * item.price}
+                        &#x20B9;{item.quantity * item.price}
                       </td>
                     </tr>
                   ))}
@@ -208,25 +225,25 @@ function OrderScreen() {
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Items</div>
-                    <div>${itemsPrice}</div>
+                    <div>&#x20B9;{itemsPrice}</div>
                   </div>
                 </li>{" "}
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Tax</div>
-                    <div>${taxPrice}</div>
+                    <div>&#x20B9;{taxPrice}</div>
                   </div>
                 </li>
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Shipping</div>
-                    <div>${shippingPrice}</div>
+                    <div>&#x20B9;{shippingPrice}</div>
                   </div>
                 </li>
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Total</div>
-                    <div>${totalPrice}</div>
+                    <div>&#x20B9;{totalPrice}</div>
                   </div>
                 </li>
                 {!isPaid && (
@@ -243,7 +260,21 @@ function OrderScreen() {
                     )}
                   </>
                 )}
-                {user?.isAdmin && order?.isPaid && !order.isDelivered && (
+                {user?.isAdmin &&
+                  order.paymentMethod === "Cash On Delivery" &&
+                  !order.isPaid &&
+                  !order.isDelivered && (
+                    <li>
+                      {loadingPay && <div>Loading...</div>}
+                      <button
+                        className="primary-button w-full"
+                        onClick={setOrderPaidHandler}
+                      >
+                        Set Order Paid
+                      </button>
+                    </li>
+                  )}
+                {user?.isAdmin && order.isPaid && !order.isDelivered && (
                   <li>
                     {loadingDeliver && <div>Loading...</div>}
                     <button

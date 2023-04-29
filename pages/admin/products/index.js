@@ -7,6 +7,7 @@ import { getError } from "../../../utils/error";
 import axiosInstance from "../../../utils/axiosInstance.js";
 import CreateProductModal from "../../../components/modals/CreateProductModal";
 import Loading from "../../../components/Loading.js";
+import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -56,27 +57,28 @@ export default function Products() {
     error: "",
   });
 
-  const createHandler = async () => {
+  const createHandler = async (formData) => {
     if (!window.confirm("Are you sure?")) {
       return;
     }
     try {
       dispatch({ type: "CREATE_REQUEST" });
-      const { data } = await axiosInstance.post(`/api/admin/products`);
+      const { data } = await axiosInstance.post(`/api/admin/products`,formData);
       dispatch({ type: "CREATE_SUCCESS" });
       toast.success("Product created successfully");
-      router.push(`/admin/product/${data.product._id}`);
+      setIsModalOpen(false);
+      // router.push(`/admin/products`);
     } catch (err) {
       dispatch({ type: "CREATE_FAIL" });
       toast.error(getError(err));
     }
   };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
         const { data } = await axiosInstance.get(`/api/admin/products`);
-        console.log(data);
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
@@ -104,10 +106,16 @@ export default function Products() {
       toast.error(getError(err));
     }
   };
+
   return (
     <Layout title="Admin Products">
       <div className="grid md:grid-cols-4 md:gap-5">
-        {isModalOpen && <CreateProductModal onClose={() => setIsModalOpen(false)} />}
+        {isModalOpen && (
+          <CreateProductModal
+            onSubmit={createHandler}
+            onClose={() => setIsModalOpen(false)}
+          />
+        )}
         <div>
           <ul className="mt-4">
             <li className="text-grey-900 transition-all duration-300 ease-in-out mb-12">
@@ -183,21 +191,13 @@ export default function Products() {
                       <td className=" p-5 ">{product.category}</td>
                       <td className=" p-5 ">{product.countInStock}</td>
                       <td className=" p-5 ">{product.rating}</td>
-                      <td className=" p-5 ">
-                        <Link
-                          type="button"
-                          className="default-button"
-                          href={`/admin/products/${product._id}`}
-                        >
-                          Edit
+                      <td className=" p-5 flex">
+                        <Link href={`/admin/products/${product._id}`}>
+                          <PencilSquareIcon className="h-6 w-6 text-gray-900 cursor-pointer" />
                         </Link>
                         &nbsp;
-                        <button
-                          onClick={() => deleteHandler(product._id)}
-                          className="default-button"
-                          type="button"
-                        >
-                          Delete
+                        <button onClick={() => deleteHandler(product._id)}>
+                          <XMarkIcon className="h-7 w-7 cursor-pointer" />
                         </button>
                       </td>
                     </tr>

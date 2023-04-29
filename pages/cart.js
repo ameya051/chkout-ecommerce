@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { XCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import Layout from "../components/layout/Layout";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
@@ -124,7 +124,7 @@ const Cart = () => {
                             handleRemoveItem(item);
                           }}
                         >
-                          <XMarkIcon className="h-7 w-7" />
+                          <XMarkIcon className="h-7 w-7 cursor-pointer" />
                         </button>
                       </td>
                     </tr>

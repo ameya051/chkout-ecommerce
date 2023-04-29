@@ -1,10 +1,10 @@
-/* eslint-disable no-unused-vars */
 import axios from "../../../utils/axiosInstance.js";
 import Link from "next/link";
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import Layout from "../../../components/layout/Layout";
 import getError from "../../../utils/error";
 import Loading from "../../../components/Loading.js";
+import { PencilSquareIcon, EyeIcon } from "@heroicons/react/24/outline";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -25,6 +25,8 @@ export default function Orders() {
     orders: [],
     error: "",
   });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,7 +49,7 @@ export default function Orders() {
             <li className="text-grey-900 transition-all duration-300 ease-in-out mb-12">
               <Link
                 className="bg-left-bottom bg-gradient-to-r from-gray-900 to-gray-900 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
-                href="/admin/dashboard"
+                href="/admin"
               >
                 Dashboard
               </Link>
@@ -109,7 +111,7 @@ export default function Orders() {
                       <td className="p-5">
                         {order.createdAt.substring(0, 10)}
                       </td>
-                      <td className="p-5">${order.totalPrice}</td>
+                      <td className="p-5">&#x20B9;{order.totalPrice}</td>
                       <td className="p-5">
                         {order.isPaid
                           ? `${order.paidAt.substring(0, 10)}`
@@ -120,13 +122,12 @@ export default function Orders() {
                           ? `${order.deliveredAt.substring(0, 10)}`
                           : "not delivered"}
                       </td>
-                      <td className="p-5">
-                        <Link
-                          type="button"
-                          className="default-button"
-                          href={`/admin/orders/`}
-                        >
-                          Edit
+                      <td className="p-5 flex">
+                        {/* <Link href={`/admin/orders/${order._id}`}>
+                          <PencilSquareIcon className="h-6 w-6 text-gray-900 cursor-pointer" />
+                        </Link> */}
+                        <Link className="pl-1" href={`/order/${order._id}`}>
+                          <EyeIcon className="h-6 w-6 text-gray-900 cursor-pointer" />
                         </Link>
                       </td>
                     </tr>

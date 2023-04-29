@@ -36,7 +36,7 @@ const ProductItem = ({ product, addToCartHandler }) => {
           </div>
         </div>
         <p className="p-1">{product.brand}</p>
-        <p>${product.price}</p>
+        <p>&#x20B9;{product.price}</p>
         <button
           className="primary-button"
           type="button"
