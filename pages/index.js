@@ -8,6 +8,7 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useDispatch, useSelector } from "react-redux";
 import { addCart } from "../store/slices/cartSlice";
+import background from "../public/images/landingimg.jpg";
 
 export default function Home({ featuredProducts, allProducts }) {
   const dispatch = useDispatch();
@@ -27,7 +28,19 @@ export default function Home({ featuredProducts, allProducts }) {
   return (
     <>
       <Layout title="Home">
-        <Carousel
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <div className="">
+            <img src="/images/landingimg.jpg" />
+          </div>
+          <div className="flex flex-col justify-center items-left">
+            <h4 className="font-semibold text-4xl pb-2">Check out in style with</h4>
+            <h5 className="font-semibold text-4xl pb-4">ChkOut clothing!</h5>
+            <Link href="/search" className="primary-button text-center">
+              Shop Now!
+            </Link>
+          </div>
+        </div>
+        {/* <Carousel
           showStatus={false}
           infiniteLoop
           showArrows={false}
@@ -48,7 +61,7 @@ export default function Home({ featuredProducts, allProducts }) {
               </Link>
             </div>
           ))}
-        </Carousel>
+        </Carousel> */}
         <h2 className="text-2xl my-4 text-center">Latest Products</h2>
         <div className="grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
           {allProducts.map((product) => {

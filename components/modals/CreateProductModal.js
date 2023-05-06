@@ -11,8 +11,6 @@ const CreateProductModal = ({ onSubmit, onClose }) => {
     brand: "",
     countInStock: 0,
     description: "",
-    isFeatured: false,
-    featuredImage: undefined,
   };
   const [formData, setFormData] = useState(initState);
 
@@ -24,12 +22,6 @@ const CreateProductModal = ({ onSubmit, onClose }) => {
       return {
         ...prevFormData,
         [name]: files ? files[0] : value,
-        featured:
-          name === "isFeatured"
-            ? value === "true"
-              ? true
-              : false
-            : prevFormData.isFeatured,
       };
     });
   };
@@ -40,6 +32,7 @@ const CreateProductModal = ({ onSubmit, onClose }) => {
     const formDataObj = new FormData();
     Object.keys(formData).forEach((key) => {
       formDataObj.append(key, formData[key]);
+      formDataObj.get(key)
     });
     onSubmit(formDataObj);
   };
@@ -163,24 +156,6 @@ const CreateProductModal = ({ onSubmit, onClose }) => {
                   />
                 </div>
                 <div className="mb-4">
-                  <label
-                    htmlFor="isFeatured"
-                    className="block text-gray-700 font-medium mb-2"
-                  >
-                    Featured
-                  </label>
-                  <select
-                    id="isFeatured"
-                    name="isFeatured"
-                    onChange={handleInputChange}
-                    className="w-full rounded-none cursor-pointer"
-                  >
-                    <option value="">-- Select an option --</option>
-                    <option value={true}>Yes</option>
-                    <option value={false}>No</option>
-                  </select>
-                </div>
-                <div className="mb-4">
                   <p className="block text-gray-700 font-medium mb-4">
                     Product Image
                   </p>
@@ -202,32 +177,6 @@ const CreateProductModal = ({ onSubmit, onClose }) => {
                   {formData.image && (
                     <img
                       src={URL.createObjectURL(formData.image)}
-                      alt="Product Preview"
-                      style={{ maxWidth: "200px", marginTop: "10px" }}
-                    />
-                  )}
-                </div>
-                <div className="mb-4">
-                  <p className="block text-gray-700 font-medium mb-4">
-                    Featured Banner
-                  </p>
-                  <label
-                    htmlFor="featuredImage"
-                    className="default-button cursor-pointer"
-                  >
-                    Choose Image
-                  </label>
-                  <input
-                    type="file"
-                    id="featuredImage"
-                    name="featuredImage"
-                    className="hidden"
-                    accept="image/*"
-                    onChange={handleInputChange}
-                  />
-                  {formData.featuredImage && (
-                    <img
-                      src={URL.createObjectURL(formData.featuredImage)}
                       alt="Product Preview"
                       style={{ maxWidth: "200px", marginTop: "10px" }}
                     />
