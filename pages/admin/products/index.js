@@ -62,11 +62,11 @@ export default function Products() {
       return;
     }
     try {
+      setIsModalOpen(false);
       dispatch({ type: "CREATE_REQUEST" });
       const { data } = await axiosInstance.post(`/api/admin/products`,formData);
       dispatch({ type: "CREATE_SUCCESS" });
       toast.success("Product created successfully");
-      setIsModalOpen(false);
       // router.push(`/admin/products`);
     } catch (err) {
       dispatch({ type: "CREATE_FAIL" });
