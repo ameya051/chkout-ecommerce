@@ -1,13 +1,12 @@
-import Link from "next/link";
-import { useRouter } from "next/router";
 import React, { useEffect, useReducer, useState } from "react";
+import Link from "next/link";
+import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { toast } from "react-toastify";
 import Layout from "../../../components/layout/Layout";
+import Loading from "../../../components/Loading.js";
+import CreateProductModal from "../../../components/modals/CreateProductModal";
 import { getError } from "../../../utils/error";
 import axiosInstance from "../../../utils/axiosInstance.js";
-import CreateProductModal from "../../../components/modals/CreateProductModal";
-import Loading from "../../../components/Loading.js";
-import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -26,7 +25,11 @@ function reducer(state, action) {
     case "CREATE_REQUEST":
       return { ...state, loadingCreate: true };
     case "CREATE_SUCCESS":
-      return { ...state, loadingCreate: false };
+      return {
+        ...state,
+        loadingCreate: false,
+        successCreate: true,
+      };
     case "CREATE_FAIL":
       return { ...state, loadingCreate: false };
 
@@ -46,10 +49,17 @@ function reducer(state, action) {
 
 export default function Products() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const router = useRouter();
 
   const [
-    { loading, error, products, loadingCreate, successDelete, loadingDelete },
+    {
+      loading,
+      error,
+      products,
+      loadingCreate,
+      successCreate,
+      successDelete,
+      loadingDelete,
+    },
     dispatch,
   ] = useReducer(reducer, {
     loading: true,
@@ -64,10 +74,12 @@ export default function Products() {
     try {
       setIsModalOpen(false);
       dispatch({ type: "CREATE_REQUEST" });
-      const { data } = await axiosInstance.post(`/api/admin/products`,formData);
+      await axiosInstance.post(
+        `/api/admin/products`,
+        formData
+      );
       dispatch({ type: "CREATE_SUCCESS" });
       toast.success("Product created successfully");
-      // router.push(`/admin/products`);
     } catch (err) {
       dispatch({ type: "CREATE_FAIL" });
       toast.error(getError(err));
@@ -87,10 +99,12 @@ export default function Products() {
 
     if (successDelete) {
       dispatch({ type: "DELETE_RESET" });
+    } else if (successCreate === true) {
+      fetchData();
     } else {
       fetchData();
     }
-  }, [successDelete]);
+  }, [successDelete, successCreate]);
 
   const deleteHandler = async (productId) => {
     if (!window.confirm("Are you sure?")) {
