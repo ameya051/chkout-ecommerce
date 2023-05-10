@@ -45,7 +45,7 @@ const CheckoutForm = ({ price, orderID }) => {
       });
       if (!payload.error) {
         const config = { "Content-Type": "application/json" };
-        const { data } = axiosInstance.patch(
+        const { data } = await axiosInstance.patch(
           `/api/orders/pay/${orderID}`,
           {
             ...payload.paymentIntent,
@@ -53,6 +53,7 @@ const CheckoutForm = ({ price, orderID }) => {
           },
           config
         );
+        window.location.reload();
       } else {
         setError(payload.error.message);
       }

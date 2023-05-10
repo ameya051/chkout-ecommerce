@@ -117,7 +117,7 @@ const Cart = () => {
                           -
                         </button>
                       </td>
-                      <td className="p-5 text-right">$ {item.price}</td>
+                      <td className="p-5 text-right">₹ {item.price}</td>
                       <td className="p-5 text-center">
                         <button
                           onClick={() => {
@@ -141,7 +141,7 @@ const Cart = () => {
                   {cartItems.reduce((a, c) => {
                     return a + c.quantity;
                   }, 0)}
-                  ): ${" "}
+                  ): ₹{" "}
                   {cartItems.reduce((a, c) => {
                     return a + c.quantity * c.price;
                   }, 0)}

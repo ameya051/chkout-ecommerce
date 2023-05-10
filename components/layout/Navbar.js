@@ -80,6 +80,9 @@ const Navbar = () => {
                   Search
                 </label>
                 <input
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                  }}
                   type="text"
                   id="search-input"
                   placeholder="Search..."
