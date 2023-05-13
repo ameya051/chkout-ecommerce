@@ -15,6 +15,7 @@ import { clearCart } from "../store/slices/cartSlice";
 function Placeorder() {
   const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.cart);
+  const { token } = useSelector((state) => state.auth);
   const { cartItems, shippingAddress, paymentMethod } = cart;
 
   const [loading, setLoading] = useState(false);
@@ -38,15 +39,25 @@ function Placeorder() {
   const handlePlaceOrder = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.post("/api/orders", {
-        orderItems: cartItems,
-        shippingAddress,
-        paymentMethod,
-        itemsPrice,
-        shippingPrice,
-        taxPrice,
-        totalPrice,
-      });
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      console.log(config);
+      const { data } = await axios.post(
+        "/api/orders",
+        {
+          orderItems: cartItems,
+          shippingAddress,
+          paymentMethod,
+          itemsPrice,
+          shippingPrice,
+          taxPrice,
+          totalPrice,
+        },
+        config
+      );
       console.log(data);
       setLoading(false);
       dispatch(clearCart());
@@ -139,7 +150,9 @@ function Placeorder() {
                 </tbody>
               </table>
               <div>
-                <Link className="hover:underline" href="/cart">Edit</Link>
+                <Link className="hover:underline" href="/cart">
+                  Edit
+                </Link>
               </div>
             </div>
           </div>

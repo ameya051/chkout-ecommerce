@@ -35,7 +35,6 @@ const Login = () => {
       if (data.error) {
         toast.error(data.error);
       }
-      console.log(data);
       Cookies.set("token", data.token);
       dispatch(setToken(data.token));
       toast.success("You've logged in successfully.");

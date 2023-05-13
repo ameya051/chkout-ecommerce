@@ -40,7 +40,7 @@ const ResetPassword = () => {
         },
       };
       const { data } = await axios.patch(
-        `http://localhost:5000/api/users/reset`,
+        `https://tiny-tan-rabbit-veil.cyclic.app/api/users/reset`,
         { token: token, password: new_password },
         config
       );

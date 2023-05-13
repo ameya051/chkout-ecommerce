@@ -54,7 +54,7 @@ const stripePromise = loadStripe(
 
 function OrderScreen() {
   const { user } = useSelector((state) => state.auth);
-
+  const { token } = useSelector((state) => state.auth);
   const { query } = useRouter();
   const orderId = query.id;
 
@@ -79,7 +79,12 @@ function OrderScreen() {
     const fetchOrder = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/orders/${orderId}`);
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const { data } = await axios.get(`/api/orders/${orderId}`,config);
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
