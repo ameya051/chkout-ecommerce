@@ -2,7 +2,7 @@ import axiosInstance from "../../../utils/axiosInstance";
 import { useRouter } from "next/router";
 import React, { useEffect, useReducer, useState } from "react";
 import { getError } from "../../../utils/error";
-import Layout from "../../../components/Layout";
+import Layout from "../../../components/layout/Layout.js";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Link from "next/link";
