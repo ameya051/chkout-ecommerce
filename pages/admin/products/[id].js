@@ -6,6 +6,7 @@ import Layout from "../../../components/layout/Layout.js";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import { useSelector } from "react-redux";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -38,6 +39,7 @@ function reducer(state, action) {
 }
 
 function AdminEditProduct() {
+  const { token } = useSelector((state) => state.auth);
   const { query } = useRouter();
   const productId = query.id;
 
@@ -60,7 +62,12 @@ function AdminEditProduct() {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axiosInstance.get(`/api/admin/products/${productId}`);
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const { data } = await axiosInstance.get(`/api/admin/products/${productId}`,config);
         dispatch({ type: "FETCH_SUCCESS" });
         setValue("name", data.name);
         setValue("slug", data.slug);

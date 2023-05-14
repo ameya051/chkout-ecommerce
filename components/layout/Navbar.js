@@ -100,7 +100,7 @@ const Navbar = () => {
           <h1 className="text-xl font-semibold mr-2 items-center">ChkOut</h1>
         </Link>
 
-        <ul className="hidden sm:flex sm:flex-row">
+        <ul className="flex flex-row">
           <li className="py-4">
             <Link className="flex" href="/cart">
               <ShoppingCartIcon className="pr-1 h-7 w-7 text-gray-900" />
@@ -159,7 +159,7 @@ const Navbar = () => {
           </li>
         </ul>
 
-        <div
+        {/* <div
           onClick={toggleMenu}
           className="block sm:hidden z-10 cursor-pointer"
         >
@@ -228,7 +228,7 @@ const Navbar = () => {
               </li>
             )}
           </ul>
-        </div>
+        </div> */}
       </nav>
     </header>
   );

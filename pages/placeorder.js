@@ -44,7 +44,6 @@ function Placeorder() {
           Authorization: `Bearer ${token}`,
         },
       };
-      console.log(config);
       const { data } = await axios.post(
         "/api/orders",
         {

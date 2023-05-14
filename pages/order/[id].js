@@ -53,8 +53,7 @@ const stripePromise = loadStripe(
 );
 
 function OrderScreen() {
-  const { user } = useSelector((state) => state.auth);
-  const { token } = useSelector((state) => state.auth);
+  const { user, token } = useSelector((state) => state.auth);
   const { query } = useRouter();
   const orderId = query.id;
 

@@ -7,6 +7,7 @@ import Loading from "../../../components/Loading.js";
 import CreateProductModal from "../../../components/modals/CreateProductModal";
 import { getError } from "../../../utils/error";
 import axiosInstance from "../../../utils/axiosInstance.js";
+import { useSelector } from "react-redux";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -67,6 +68,8 @@ export default function Products() {
     error: "",
   });
 
+  const { token } = useSelector((state) => state.auth);
+
   const createHandler = async (formData) => {
     if (!window.confirm("Are you sure?")) {
       return;
@@ -74,10 +77,12 @@ export default function Products() {
     try {
       setIsModalOpen(false);
       dispatch({ type: "CREATE_REQUEST" });
-      await axiosInstance.post(
-        `/api/admin/products`,
-        formData
-      );
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      await axiosInstance.post(`/api/admin/products`, formData, config);
       dispatch({ type: "CREATE_SUCCESS" });
       toast.success("Product created successfully");
     } catch (err) {

@@ -15,6 +15,7 @@ import {
 import Layout from "../../components/layout/Layout.js";
 import {getError} from "../../utils/error";
 import Loading from "../../components/Loading.js";
+import { useSelector } from "react-redux";
 
 Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 export const options = {
@@ -46,11 +47,18 @@ export default function Dashboard() {
     error: "",
   });
 
+  const { token } = useSelector((state) => state.auth);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/orders/admin/summary`);
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const { data } = await axios.get(`/api/orders/admin/summary`,config);
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (error) {
         dispatch({ type: "FETCH_FAIL", payload: getError(error) });

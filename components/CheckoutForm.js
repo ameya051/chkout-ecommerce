@@ -9,7 +9,7 @@ const CheckoutForm = ({ price, orderID }) => {
   const stripe = useStripe();
   const elements = useElements();
 
-  const { user } = useSelector((state) => state.auth);
+  const { user, token } = useSelector((state) => state.auth);
 
   // STEP 1: create a payment intent and getting the secret
   useEffect(() => {
@@ -44,7 +44,12 @@ const CheckoutForm = ({ price, orderID }) => {
         },
       });
       if (!payload.error) {
-        const config = { "Content-Type": "application/json" };
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        // const config = { "Content-Type": "application/json" };
         const { data } = await axiosInstance.patch(
           `/api/orders/pay/${orderID}`,
           {

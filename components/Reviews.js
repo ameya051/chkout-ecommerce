@@ -7,6 +7,7 @@ import { getError } from "../utils/error";
 import Rating from "./Rating";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 
 function Reviews({ product, user }) {
   const [reviews, setReviews] = useState([]);
@@ -20,13 +21,20 @@ function Reviews({ product, user }) {
 
   const router = useRouter();
 
+  const { token } = useSelector((state) => state.auth);
+
   const submitHandler = async ({ rating, comment }) => {
     setLoading(true);
     try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
       await axiosInstance.post(`/api/products/reviews/${product._id}`, {
         rating,
         comment,
-      });
+      },config);
       setLoading(false);
       toast.success("Review submitted successfully");
       fetchReviews();

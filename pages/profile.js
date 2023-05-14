@@ -2,10 +2,13 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { getError } from "../utils/error";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import Layout from "../components/layout/Layout";
+import { useSelector } from "react-redux";
 
 export default function ProfileScreen() {
+
+  const { token } = useSelector((state) => state.auth);
 
   const {
     handleSubmit,
@@ -22,11 +25,16 @@ export default function ProfileScreen() {
 
   const submitHandler = async ({ name, email, password }) => {
     try {
-      await axios.put("/api/auth/update", {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      await axiosInstance.put("/api/auth/update", {
         name,
         email,
         password,
-      });
+      },config);
       
       toast.success("Profile updated successfully");
       if (result.error) {

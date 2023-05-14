@@ -3,6 +3,7 @@ import axios from "../utils/axiosInstance.js";
 import getError from "../utils/error";
 import Layout from "../components/layout/Layout";
 import Link from "next/link";
+import { useSelector } from "react-redux";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -24,11 +25,18 @@ export default function OrderHistory() {
     error: "",
   });
 
+  const { token } = useSelector((state) => state.auth);
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(`/api/orders/history`);
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const { data } = await axios.get(`/api/orders/history`,config);
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
