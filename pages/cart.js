@@ -6,7 +6,7 @@ import Layout from "../components/layout/Layout";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import dynamic from "next/dynamic";
-import axios from "axios";
+import axios from "../utils/axiosInstance.js";
 import { useDispatch, useSelector } from "react-redux";
 import { addCart, removeItem } from "../store/slices/cartSlice";
 
@@ -20,7 +20,7 @@ const Cart = () => {
 
   const handleIncrement = async (item) => {
     const quantity = item.quantity + 1;
-    const { data } = await axios.get(`/api/products/${item._id}`);
+    const { data } = await axios.get(`/api/products/${item.slug}`);
 
     if (data.countInStock < quantity) {
       return toast.error("Product is out of stock.");
