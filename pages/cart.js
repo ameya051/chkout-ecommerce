@@ -23,7 +23,7 @@ const Cart = () => {
     const { data } = await axios.get(`/api/products/${item.slug}`);
 
     if (data.countInStock < quantity) {
-      return toast.error("Product is out of stock.");
+      return toast.error("Product is out of stock.",{toastId: "456"});
     } else {
       dispatch(addCart({ ...item, quantity }));
     }
@@ -43,6 +43,7 @@ const Cart = () => {
         progress: undefined,
         theme: "light",
         type: "error",
+        toastId: "123"
       });
       return;
     } else {

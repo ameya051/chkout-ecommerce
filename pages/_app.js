@@ -28,7 +28,7 @@ export default function App({ Component, pageProps }) {
     <>
       <Provider store={store}>
         <Component {...pageProps} />
-        <ToastContainer position="bottom-right" />
+        <ToastContainer limit={1} position="bottom-right" />
       </Provider>
     </>
   );

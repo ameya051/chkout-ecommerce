@@ -17,10 +17,7 @@ function Footer() {
         <div>
           <h2 className="text-lg font-medium pb-4">Location</h2>
           <p className="text-[#9b9b9b]">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sodales
-            luctus arcu, ut molestie lacus fermentum nec. Nulla tristique tellus
-            suscipit, commodo erat sit amet, dignissim neque. Integer quis nisl
-            sem.
+            AB Road, Vijay Nagar, Indore, Madhya Pradesh, India.
           </p>
         </div>
         <div>
