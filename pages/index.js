@@ -10,6 +10,7 @@ import { addCart } from "../store/slices/cartSlice";
 export default function Home({ allProducts }) {
   const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.cart);
+  
   const addToCartHandler = async (product) => {
     const existItem = cart.cartItems.find((x) => x.slug === product.slug);
     const quantity = existItem ? existItem.quantity + 1 : 1;
