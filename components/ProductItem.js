@@ -4,7 +4,8 @@ import React from "react";
 
 const ProductItem = ({ product, addToCartHandler }) => {
   return (
-    <div className="card">
+    <div className="transform overflow-hidden bg-white duration-200 hover:scale-105 cursor-pointer border border-gray-200  shadow-md 
+    hover:shadow-lg rounded-[10px]">
       <Link passHref href={`/product/${product.slug}`}>
         <div className="shadow relative rounded-none w-full pt-[100%]">
           {/* <img src={product.image} alt={product.name} className="shadow" /> */}

@@ -29,6 +29,8 @@ const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const toggleSearch = () => setIsSearchOpen(!isSearchOpen);
   const [query, setQuery] = useState("");
+  const [show, setShow] = useState("translate-y-0");
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -41,6 +43,26 @@ const Navbar = () => {
       }, 0)
     );
   }, [cart.cartItems]);
+
+  const controlNavbar = () => {
+    if (window.scrollY > 100) {
+      if (window.scrollY > lastScrollY && !isOpen) {
+        setShow("-translate-y-[80px]");
+      } else {
+        setShow("shadow-sm");
+      }
+    } else {
+      setShow("translate-y-0");
+    }
+    setLastScrollY(window.scrollY);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", controlNavbar);
+    return () => {
+      window.removeEventListener("scroll", controlNavbar);
+    };
+  }, [lastScrollY]);
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -57,7 +79,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-30 w-full bg-white">
+    <header className={`sticky top-0 z-30 w-full bg-white transition-transform duration-300 ${show}`}>
       <nav className="flex h-20 items-center px-4 md:px-24 justify-between">
         <button
           onClick={toggleSearch}

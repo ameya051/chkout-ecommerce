@@ -2,13 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import Layout from "../components/layout/Layout";
+import Layout from "../components/layout/Layout.js";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import dynamic from "next/dynamic";
 import axios from "../utils/axiosInstance.js";
 import { useDispatch, useSelector } from "react-redux";
-import { addCart, removeItem } from "../store/slices/cartSlice";
+import { addCart, removeItem } from "../store/slices/cartSlice.js";
 
 const Cart = () => {
   const dispatch = useDispatch();
