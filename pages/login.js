@@ -21,6 +21,7 @@ const Login = () => {
   const {
     handleSubmit,
     register,
+    setValue,
     formState: { errors },
   } = useForm();
 
@@ -119,10 +120,19 @@ const Login = () => {
             </Link>
           </div>
         </div>
-        <div className="mb-4">
+        <div className="mb-4 flex gap-4">
           <button className="primary-button">Login</button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setValue("email", "admin@example.com");
+              setValue("password", "123456");
+            }}
+            className="primary-button"
+          >
+            Login as Guest
+          </button>
         </div>
-        <p className="text-sm">Admin email: admin@example.com Admin Password: 123456</p>
       </form>
     </Layout>
   );

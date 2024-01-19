@@ -30,7 +30,7 @@ h6 {
 }
 
 .primary-button {
-  @apply bg-[#b9b9b9]  py-2 px-4 mt-2 shadow-sm outline-none rounded-full hover:bg-[#cacaca] active:bg-[#cacaca] active:scale-95 transition-all;
+  @apply bg-white  py-2 px-4 mt-2 shadow-sm border-[1px] border-black hover:border-none rounded-none text-black hover:text-white hover:bg-black active:bg-[#cacaca] active:scale-95 duration-300;
 }
 .default-button {
   @apply bg-gray-100 py-2  px-4 text-black shadow outline-none hover:bg-gray-200  active:bg-gray-300;

@@ -34,6 +34,7 @@ const Navbar = () => {
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+    console.log(isOpen);
   };
 
   useEffect(() => {
@@ -70,7 +71,7 @@ const Navbar = () => {
     Cookies.remove("cart");
     dispatch(logout());
     dispatch(resetCart());
-    router.replace("/login");
+    router.replace("/");
   };
 
   const submitHandler = (e) => {
@@ -79,65 +80,47 @@ const Navbar = () => {
   };
 
   return (
-    <header className={`sticky top-0 z-30 w-full bg-white transition-transform duration-300 ${show}`}>
+    <header
+      className={`sticky top-0 z-[500] w-full bg-white transition-transform duration-300 ${show}`}
+    >
       <nav className="flex h-20 items-center px-4 md:px-24 justify-between">
-        <button
-          onClick={toggleSearch}
-          className="inline-flex items-center border-b border-transparent hover:border-gray-300 focus:outline-none"
-        >
-          <MagnifyingGlassIcon className="w-5 h-5 mr-2" />
-          <span className="text-gray-500">Search...</span>
-        </button>
-        {isSearchOpen && (
-          <div className="fixed inset-0 z-50 bg-gray-800 bg-opacity-75 flex justify-center items-center">
-            <div className="bg-white rounded-none w-full p-6 absolute top-0">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-medium text-gray-900">Search</h2>
-                <button onClick={toggleSearch}>
-                  <XMarkIcon className="w-6 h-6 text-gray-500" />
-                </button>
-              </div>
-              <form className="flex flex-col" onSubmit={submitHandler}>
-                <label htmlFor="search-input" className="sr-only">
-                  Search
-                </label>
-                <input
-                  onChange={(e) => {
-                    setQuery(e.target.value);
-                  }}
-                  type="text"
-                  id="search-input"
-                  placeholder="Search..."
-                  className="border border-gray-300 rounded-md px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <button type="submit" className="primary-button">
-                  Search
-                </button>
-              </form>
-            </div>
-          </div>
-        )}
-
+        {/* <button className="md:hidden" type="button" onClick={toggleMenu}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+            />
+          </svg>
+        </button> */}
         <Link href="/">
           <h1 className="text-xl font-semibold mr-2 items-center">ChkOut</h1>
         </Link>
-
-        <ul className="flex flex-row">
-          <li className="py-4">
-            <Link className="flex" href="/cart">
-              <ShoppingCartIcon className="pr-1 h-7 w-7 text-gray-900" />
-              {cartItemsCount > 0 && (
-                <sup className=" relative top-0 right-0 flex items-center justify-center w-4 h-4 bg-[#1e293b] rounded-full">
-                  <div className="text-xs leading-tight text-white">
-                    <p>{cartItemsCount}</p>
-                  </div>
-                </sup>
-              )}
-            </Link>
-          </li>
-          <li className="pl-4 py-4">
+        <ul className="gap-16 flex-row hidden md:flex z-[50]">
+          <Link className="hover:underline font-medium" href="/">
+            Home
+          </Link>
+          <Link className="hover:underline font-medium" href="/search">
+            Shop
+          </Link>
+          <Link className="hover:underline font-medium" href="/">
+            About
+          </Link>
+          <Link className="hover:underline font-medium" href="/">
+            Contact
+          </Link>
+        </ul>
+        <ul className="flex flex-row gap-8 z-[50]">
+          <li className="py-4 hidden sm:block">
             {token ? (
-              <Menu as="div" className="relative inline-block">
+              <Menu as="div" className="relative inline-block z-[50]">
                 <Menu.Button as="button" className="flex">
                   <UserIcon className=" pr-1 h-7 w-7  text-gray-900" />
                 </Menu.Button>
@@ -174,16 +157,88 @@ const Navbar = () => {
                 </Menu.Items>
               </Menu>
             ) : (
-              <Link className="hover:underline" href="/login">
-                <h6>Login</h6>
-              </Link>
+              <Menu as="div" className="relative inline-block z-[50]">
+                <Menu.Button as="button" className="flex">
+                  <UserIcon className=" pr-1 h-7 w-7  text-gray-900" />
+                </Menu.Button>
+                <Menu.Items
+                  as="div"
+                  className="absolute right-0 w-56 origin-top-right bg-white  shadow-lg "
+                >
+                  <Menu.Item>
+                    <Link className="dropdown-link" href="/login">
+                      <h6>Login</h6>
+                    </Link>
+                  </Menu.Item>
+                  <Menu.Item>
+                    <Link className="dropdown-link" href="/register">
+                      <h6>Sign Up</h6>
+                    </Link>
+                  </Menu.Item>
+                </Menu.Items>
+              </Menu>
             )}
           </li>
+          <li className="py-4">
+            <button
+              onClick={toggleSearch}
+              className="inline-flex items-center border-b border-transparent hover:border-gray-300 focus:outline-none"
+            >
+              <MagnifyingGlassIcon className="w-7 h-7 pr-1" />
+            </button>
+          </li>
+          <li className="py-4">
+            <Link className="flex" href="/cart">
+              <ShoppingCartIcon className="pr-1 h-7 w-7 text-gray-900" />
+              {cartItemsCount > 0 && (
+                <sup className=" relative top-0 right-0 flex items-center justify-center w-4 h-4 bg-[#1e293b] rounded-full">
+                  <div className="text-xs leading-tight text-white">
+                    <p>{cartItemsCount}</p>
+                  </div>
+                </sup>
+              )}
+            </Link>
+          </li>
         </ul>
+        {/* <div className={`${isSearchOpen ? "block" : "hidden"}`}> */}
+        <div
+          className={`fixed inset-0 z-30 flex justify-center items-center ${
+            isSearchOpen
+              ? "block"
+              : "hidden"
+          }`}
+        >
+          <div
+            className={`bg-white rounded-none w-full p-6 absolute top-0 ${
+              isSearchOpen
+                ? "translate-y-20 opacity-1"
+                : "-translate-y-20 opacity-0"
+            }  duration-150`}
+          >
+            <form className="flex flex-col" onSubmit={submitHandler}>
+              <label htmlFor="search-input" className="sr-only">
+                Search
+              </label>
+              <input
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                }}
+                type="text"
+                id="search-input"
+                placeholder="Search..."
+                className="border border-gray-300 rounded-md px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button type="submit" className="primary-button">
+                Search
+              </button>
+            </form>
+          </div>
+        </div>
+        {/* </div> */}
 
-        {/* <div
+        <div
           onClick={toggleMenu}
-          className="block sm:hidden z-10 cursor-pointer"
+          className="block sm:hidden z-[1000] cursor-pointer"
         >
           {isOpen ? (
             <XMarkIcon className="md:hidden ml-4 h-6 w-6 text-gray-900" />
@@ -195,46 +250,58 @@ const Navbar = () => {
         <div
           className={
             isOpen
-              ? "sm:hidden absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center w-full h-screen bg-white text-center ease-in duration-300"
-              : "sm:hidden absolute top-0 left-[-100%] right-0 bottom-0 flex justify-center items-center w-full h-screen bg-white text-center ease-in duration-300"
+              ? "sm:hidden absolute top-0 z-[990] right-0 bottom-0 flex justify-start items-center w-full h-screen bg-white ease-in duration-300"
+              : "sm:hidden absolute top-0 right-[-100%] bottom-0 flex justify-start items-center w-full h-screen bg-white ease-in duration-300"
           }
         >
-          <ul>
+          <ul className="w-full mx-4">
             <li
               onClick={toggleMenu}
-              className="p-4 text-4xl hover:text-gray-500"
+              className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
             >
-              <Link href="/">Home</Link>
+              <Link className="w-full" href="/">Home</Link>
             </li>
             <li
               onClick={toggleMenu}
-              className="p-4 text-4xl hover:text-gray-500"
+              className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
             >
-              <Link href="/cart">Cart</Link>
+              <Link href="/">Shop</Link>
+            </li>
+            <li
+              onClick={toggleMenu}
+              className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
+            >
+              <Link href="/">About</Link>
+            </li>
+            <li
+              onClick={toggleMenu}
+              className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
+            >
+              <Link href="/">Contact</Link>
             </li>
             {token ? (
               <>
                 <li
                   onClick={toggleMenu}
-                  className="p-4 text-4xl hover:text-gray-500"
+                  className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
                 >
                   <Link href="/profile">Profile</Link>
                 </li>
                 <li
                   onClick={toggleMenu}
-                  className="p-4 text-4xl hover:text-gray-500"
+                  className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
                 >
                   <Link href="/order-history">Order History</Link>
                 </li>
                 <li
                   onClick={toggleMenu}
-                  className="p-4 text-4xl hover:text-gray-500"
+                  className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
                 >
                   <Link href="/admin">Admin Dashboard</Link>
                 </li>
                 <li
                   onClick={toggleMenu}
-                  className="p-4 text-4xl hover:text-gray-500"
+                  className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
                 >
                   <Link href="#" onClick={handleLogout}>
                     Logout
@@ -244,13 +311,13 @@ const Navbar = () => {
             ) : (
               <li
                 onClick={toggleMenu}
-                className="p-4 text-4xl hover:text-gray-500"
+                className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
               >
                 <Link href="/login">Login</Link>
               </li>
             )}
           </ul>
-        </div> */}
+        </div>
       </nav>
     </header>
   );

@@ -153,7 +153,7 @@ function AdminEditProduct() {
         <div>
           <ul>
             <li>
-              <Link href="/admin/dashboard">Dashboard</Link>
+              <Link href="/admin">Dashboard</Link>
             </li>
             <li>
               <Link href="/admin/orders">Orders</Link>

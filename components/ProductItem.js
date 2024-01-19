@@ -4,23 +4,27 @@ import React from "react";
 
 const ProductItem = ({ product, addToCartHandler }) => {
   return (
-    <div className="transform overflow-hidden bg-white duration-200 hover:scale-105 cursor-pointer border border-gray-200  shadow-md 
-    hover:shadow-lg rounded-[10px]">
+    <div
+      className="overflow-hidden bg-white duration-200 relative cursor-pointer border border-gray-200  shadow-sm 
+    hover:shadow-md"
+    >
       <Link passHref href={`/product/${product.slug}`}>
         <div className="shadow relative rounded-none w-full pt-[100%]">
-          {/* <img src={product.image} alt={product.name} className="shadow" /> */}
           <Image
             src={product.image}
             alt={product.name}
             fill
-            className="w-full h-full top-0 left-0 object-cover"
+            className="w-full h-full top-0 left-0 object-cover hover:scale-105 duration-300"
             style={{ objectFit: "cover" }}
           ></Image>
         </div>
       </Link>
-      <div className="flex flex-col items-center justify-center p-4">
+      <div className="flex flex-col items-start justify-center p-4">
         <Link href={`/product/${product.slug}`}>
-          <h2 className="text-lg">{product.name}</h2>
+          <h2 className="text-xl font-semibold text-[#3A3A3A]">
+            {product.name}
+          </h2>
+          <p className="font-medium text-[#898989]">{product.brand}</p>
         </Link>
         <div className="flex flex-row">
           {product.rating}
@@ -36,8 +40,11 @@ const ProductItem = ({ product, addToCartHandler }) => {
             </svg>
           </div>
         </div>
-        <p className="p-1">{product.brand}</p>
-        <p>&#x20B9;{product.price}</p>
+        <p className="text-lg font-semibold text-[#3A3A3A]">
+          &#x20B9;{product.price}
+        </p>
+      </div>
+      <div className="absolute flex flex-col items-center justify-center w-full h-full top-0 bottom-0 z-50 opacity-0 duration-300 hover:opacity-100 bg-black/50">
         <button
           className="primary-button"
           type="button"
@@ -45,6 +52,11 @@ const ProductItem = ({ product, addToCartHandler }) => {
         >
           Add to cart
         </button>
+        <Link href={`/product/${product.slug}`}>
+          <button className="primary-button">
+            View Product
+          </button>
+        </Link>
       </div>
     </div>
   );

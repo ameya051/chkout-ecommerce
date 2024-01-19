@@ -58,7 +58,7 @@ export default function Dashboard() {
             Authorization: `Bearer ${token}`,
           },
         };
-        const { data } = await axios.get(`/api/orders/admin/summary`,config);
+        const { data } = await axios.get(`/api/admin`,config);
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (error) {
         dispatch({ type: "FETCH_FAIL", payload: getError(error) });

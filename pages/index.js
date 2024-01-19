@@ -10,7 +10,7 @@ import { addCart } from "../store/slices/cartSlice";
 export default function Home({ allProducts }) {
   const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.cart);
-  
+
   const addToCartHandler = async (product) => {
     const existItem = cart.cartItems.find((x) => x.slug === product.slug);
     const quantity = existItem ? existItem.quantity + 1 : 1;
@@ -25,7 +25,7 @@ export default function Home({ allProducts }) {
   return (
     <>
       <Layout title="Home">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           <div className="">
             <img src="/images/landingimg.jpg" />
           </div>
@@ -36,8 +36,38 @@ export default function Home({ allProducts }) {
               Shop Now!
             </Link>
           </div>
+        </div> */}
+        <div className="relative bg-cover bg-center bg-no-repeat h-screen bg-[url('/images/hero.jpg')]">
+          <div className="absolute flex items-center justify-center w-full h-full top-0 bottom-0 z-30 opacity-100 bg-black/50">
+            <div className="text-center text-white">
+              <h1 className="text-5xl font-bold mb-4">Check out in style with</h1>
+              <p className="text-5xl font-bold mb-4">ChkOut clothing!</p>
+              <Link
+                href="/search"
+                className="primary-button mt-4"
+              >
+                Get Started
+              </Link>
+            </div>
+          </div>
+
+          {/* <div class="flex items-center justify-center h-full z-50">
+            <div class="text-center text-white">
+              <h1 class="text-5xl font-bold mb-4">Check out in style with</h1>
+              <p class="text-5xl font-bold mb-4">ChkOut clothing!</p>
+              <Link
+                href="/"
+                class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300"
+              >
+                Get Started
+              </Link>
+            </div>
+          </div> */}
         </div>
-        <h2 className="text-2xl my-4 text-center">Latest Products</h2>
+
+        <h2 className="text-3xl my-4 text-center font-bold text-[#3A3A3A]">
+          Our Products
+        </h2>
         <div className="grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
           {allProducts.map((product) => {
             return (

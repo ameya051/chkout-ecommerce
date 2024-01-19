@@ -4,7 +4,7 @@ import React, { useEffect, useReducer, useState } from "react";
 import Layout from "../../../components/layout/Layout";
 import getError from "../../../utils/error";
 import Loading from "../../../components/Loading.js";
-import { PencilSquareIcon, EyeIcon } from "@heroicons/react/24/outline";
+import { EyeIcon } from "@heroicons/react/24/outline";
 import { useSelector } from "react-redux";
 
 function reducer(state, action) {
@@ -38,9 +38,10 @@ export default function Orders() {
             Authorization: `Bearer ${token}`,
           },
         };
-        const { data } = await axios.get(`/api/orders/admin`, config);
+        const { data } = await axios.get(`/api/admin/orders`, config);
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
+        console.log(err);
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
       }
     };
