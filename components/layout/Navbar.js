@@ -203,9 +203,7 @@ const Navbar = () => {
         {/* <div className={`${isSearchOpen ? "block" : "hidden"}`}> */}
         <div
           className={`fixed inset-0 z-30 flex justify-center items-center ${
-            isSearchOpen
-              ? "block"
-              : "hidden"
+            isSearchOpen ? "block" : "hidden"
           }`}
         >
           <div
@@ -246,78 +244,82 @@ const Navbar = () => {
             <Bars3Icon className="md:hidden ml-4 h-6 w-6 text-gray-900" />
           )}
         </div>
-
-        <div
-          className={
-            isOpen
-              ? "sm:hidden absolute top-0 z-[990] right-0 bottom-0 flex justify-start items-center w-full h-screen bg-white ease-in duration-300"
-              : "sm:hidden absolute top-0 right-[-100%] bottom-0 flex justify-start items-center w-full h-screen bg-white ease-in duration-300"
-          }
-        >
-          <ul className="w-full mx-4">
-            <li
-              onClick={toggleMenu}
-              className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
-            >
-              <Link className="w-full" href="/">Home</Link>
-            </li>
-            <li
-              onClick={toggleMenu}
-              className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
-            >
-              <Link href="/">Shop</Link>
-            </li>
-            <li
-              onClick={toggleMenu}
-              className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
-            >
-              <Link href="/">About</Link>
-            </li>
-            <li
-              onClick={toggleMenu}
-              className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
-            >
-              <Link href="/">Contact</Link>
-            </li>
-            {token ? (
-              <>
-                <li
-                  onClick={toggleMenu}
-                  className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
-                >
-                  <Link href="/profile">Profile</Link>
-                </li>
-                <li
-                  onClick={toggleMenu}
-                  className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
-                >
-                  <Link href="/order-history">Order History</Link>
-                </li>
-                <li
-                  onClick={toggleMenu}
-                  className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
-                >
-                  <Link href="/admin">Admin Dashboard</Link>
-                </li>
-                <li
-                  onClick={toggleMenu}
-                  className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
-                >
-                  <Link href="#" onClick={handleLogout}>
-                    Logout
-                  </Link>
-                </li>
-              </>
-            ) : (
+        {isOpen && (
+          <div
+            className="w-screen h-screen animate-mobileNav sm:hidden absolute top-0 z-[990] bottom-0 flex justify-start items-center bg-white"
+            // className={
+            //   isOpen
+            //     ? "sm:hidden absolute top-0 z-[990] bottom-0 flex justify-start items-center w-full h-screen bg-white ease-in duration-300"
+            //     : "sm:hidden absolute top-0 translate-x-[100%] bottom-0 flex justify-start items-center w-full h-screen bg-white ease-in duration-300"
+            // }
+          >
+            <ul className="w-full mx-4">
               <li
                 onClick={toggleMenu}
                 className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
               >
-                <Link href="/login">Login</Link>
+                <Link className="w-full" href="/">
+                  Home
+                </Link>
               </li>
-            )}
-          </ul>
-        </div>
+              <li
+                onClick={toggleMenu}
+                className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
+              >
+                <Link href="/">Shop</Link>
+              </li>
+              <li
+                onClick={toggleMenu}
+                className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
+              >
+                <Link href="/">About</Link>
+              </li>
+              <li
+                onClick={toggleMenu}
+                className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
+              >
+                <Link href="/">Contact</Link>
+              </li>
+              {token ? (
+                <>
+                  <li
+                    onClick={toggleMenu}
+                    className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
+                  >
+                    <Link href="/profile">Profile</Link>
+                  </li>
+                  <li
+                    onClick={toggleMenu}
+                    className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
+                  >
+                    <Link href="/order-history">Order History</Link>
+                  </li>
+                  <li
+                    onClick={toggleMenu}
+                    className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
+                  >
+                    <Link href="/admin">Admin Dashboard</Link>
+                  </li>
+                  <li
+                    onClick={toggleMenu}
+                    className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
+                  >
+                    <Link href="#" onClick={handleLogout}>
+                      Logout
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                <li
+                  onClick={toggleMenu}
+                  className="py-2 pl-1 text-xl hover:text-gray-500 border-b border-gray-500"
+                >
+                  <Link href="/login">Login</Link>
+                </li>
+              )}
+            </ul>
+          </div>
+        )}
       </nav>
     </header>
   );
