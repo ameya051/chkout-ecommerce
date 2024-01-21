@@ -12,7 +12,7 @@ const Layout = ({ title, children }) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="flex min-h-screen flex-col justify-between max-w-screen">
+      <div className="flex min-h-screen flex-col justify-between w-screen">
         <Navbar />
         <main className="container m-auto my-4 md:my-8 px-4 md:px-24">
           {children}
