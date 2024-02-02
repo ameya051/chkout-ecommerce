@@ -14,8 +14,9 @@ import {
 } from "@heroicons/react/24/outline";
 import Cookies from "js-cookie";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../../store/slices/authSlice";
-import { resetCart } from "../../store/slices/cartSlice";
+import { logout } from "../../../store/slices/authSlice";
+import { resetCart } from "../../../store/slices/cartSlice";
+import Searchbar from './Searchbar'
 
 const Navbar = () => {
   const { token, user } = useSelector((state) => state.auth);
@@ -72,11 +73,6 @@ const Navbar = () => {
     dispatch(logout());
     dispatch(resetCart());
     router.replace("/");
-  };
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-    router.push(query ? `/search/?query=${query}` : "/search");
   };
 
   return (
@@ -200,39 +196,8 @@ const Navbar = () => {
             </Link>
           </li>
         </ul>
-        {/* <div className={`${isSearchOpen ? "block" : "hidden"}`}> */}
-        <div
-          className={`fixed inset-0 z-30 flex justify-center items-center ${
-            isSearchOpen ? "block" : "hidden"
-          }`}
-        >
-          <div
-            className={`bg-white rounded-none w-full p-6 absolute top-0 ${
-              isSearchOpen
-                ? "translate-y-20 opacity-1"
-                : "-translate-y-20 opacity-0"
-            }  duration-150`}
-          >
-            <form className="flex flex-col" onSubmit={submitHandler}>
-              <label htmlFor="search-input" className="sr-only">
-                Search
-              </label>
-              <input
-                onChange={(e) => {
-                  setQuery(e.target.value);
-                }}
-                type="text"
-                id="search-input"
-                placeholder="Search..."
-                className="border border-gray-300 rounded-md px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button type="submit" className="primary-button">
-                Search
-              </button>
-            </form>
-          </div>
-        </div>
-        {/* </div> */}
+        
+        <Searchbar isSearchOpen={isSearchOpen} />
 
         <div
           onClick={toggleMenu}

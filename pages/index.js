@@ -25,7 +25,7 @@ export default function Home({ allProducts }) {
   return (
     <>
       <Layout title="Home">
-        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           <div className="">
             <img src="/images/landingimg.jpg" />
           </div>
@@ -36,8 +36,8 @@ export default function Home({ allProducts }) {
               Shop Now!
             </Link>
           </div>
-        </div> */}
-        <div className="relative bg-cover bg-center bg-no-repeat h-screen bg-[url('/images/hero.jpg')]">
+        </div>
+        {/* <div className="relative bg-cover bg-center bg-no-repeat h-screen bg-[url('/images/hero.jpg')]">
           <div className="absolute flex items-center justify-center w-full h-full top-0 bottom-0 z-30 opacity-100 bg-black/50">
             <div className="text-center text-white">
               <h1 className="text-5xl font-bold mb-4">Check out in style with</h1>
@@ -51,7 +51,7 @@ export default function Home({ allProducts }) {
             </div>
           </div>
 
-          {/* <div class="flex items-center justify-center h-full z-50">
+          <div class="flex items-center justify-center h-full z-50">
             <div class="text-center text-white">
               <h1 class="text-5xl font-bold mb-4">Check out in style with</h1>
               <p class="text-5xl font-bold mb-4">ChkOut clothing!</p>
@@ -62,8 +62,8 @@ export default function Home({ allProducts }) {
                 Get Started
               </Link>
             </div>
-          </div> */}
-        </div>
+          </div>
+        </div> */}
 
         <h2 className="text-3xl my-4 text-center font-bold text-[#3A3A3A]">
           Our Products
